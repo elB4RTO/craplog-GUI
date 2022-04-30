@@ -9,7 +9,7 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
 ```
 
 <br>
-CRAPLOG is a tool which takes Apache2 logs in their default form, parses them and creates simple statistics.<br>
+CRAPLOG is a tool that takes Apache2 logs in their default form, parses them and creates simple statistics.<br>
 <br>
 <br>
 This fully Graphical version of CRAPLOG allows you to work on single-session log files (<i>*.log.1</i>, for instance), or to select multiple files to use (eg. older logs/gzipped-logs files).<br>
@@ -20,7 +20,7 @@ This fully Graphical version of CRAPLOG allows you to work on single-session log
 <br>
 <br>
 Differently from the other versions, this version of CRAPLOG will store statistics depending on the date of the single lines, to give more imporance to times and to analyze/backtrack statistics more easily.<br>
-Be aware that parsing the same logs twice will lead to altered statistics, since log-files usage is not tracked.<br>
+Be aware that log-files usage is not tracked, be careful of not parsing the same logs twice, which will lead to altered statistics.<br>
 <br>
 <img src="https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java2.png">
 <br>
@@ -34,7 +34,7 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 <br>
 <br>
 <br>
-<b>REQUIREMENTS / DEPENDENCIES / PLUGINS</b>:<br><br>
+<b>MINIMUM REQUIREMENTS / DEPENDENCIES / PLUGINS USED</b>:<br><br>
 - <i>JavaSE 11</i><br>
 - <i>Maven plugins</i><br>
 - <i>Apache common compress</i><br>
