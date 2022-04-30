@@ -54,15 +54,11 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 <code>[...]</code><br>
 <br>
 <br>
-<br>
-<br>
 <br><hr><br>
 <br>
 <b>IMPORTANT NOTE</b>:<br>
 <br>
 Like in the previous (<i>4.0</i>) version, this version of CRAPLOG will <b>automatically remove confilct files</b> during execution<br>
-<br>
-<br>
 <br>
 <br><hr><br>
 <br>
@@ -90,7 +86,6 @@ IP - - [DATE:TIME] "REQUEST URI" RESPONSE "FROM URI" "USER AGENT"<br>
 <i>NOTE</i>:<br>
 Please notice that CRAPLOG will olny take '<b>*.log.*</b>' files as input ('<i>.1</i>' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full log stack of an entire (past) day. Running it against a <i>today</i>'s file (which is not complete yet) may lead to re-running it in the future on the same file, parsing the same lines twice.<br>
 CRAPLOG is no more meant to be ran daily :)<br>
-<br>
 <br>
 <br><hr><br>
 <br>
@@ -124,7 +119,6 @@ You can now add IP addresses to this list (may them be full IPs, only a the net-
 Please notice that the given sequence must be the starting part: it's not possible (at the moment, and more likely also in future versions) to skip IPs endings or just containing that sequence. As an example, if you insert "123", then only IP addresses starting with that sequence will be skipped; if you insert ".1", then nothing will be skipped, since it is considered invalid, but the shortcut "::1" is used by Apache2 for internal connections and will therefore be valid to skip those lines.<br>
 <br>
 <img src="https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java4.png">
-<br>
 <br>
 <br><hr><br>
 <br>
