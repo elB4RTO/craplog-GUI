@@ -53,6 +53,39 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 <code>[...]</code><br>
 <code>[...]</code><br>
 <br>
+<br><hr><br>
+<br>
+<b>COMPILING FROM SOURCE</b>:<br><br>
+<br>
+- Install the Maven Project Manager from your system's package manager:<br><br>
+<i>Debian / Ubuntu / Mint / ...</i>:<br><code>sudo apt install maven</code><br><br>
+<i>Arch / Manjaro / ...</i>:<br><code>sudo pacman -S maven</code><br><br>
+<i>Fedora</i>:<br><code>sudo dnf install maven</code><br><br>
+<i>OpenSUSE</i>:<br><code>sudo zypper install maven</code><br><br>
+<i>Slackware</i>:<br><code>sudo slackpkg install apache-maven</code><br><br>
+<i>Void</i>:<br><code>sudo xbps-install apache-maven-bin</code><br><br>
+<i>FreeBSD</i>:<br><code>sudo pkg install maven</code><br><br><br>
+- Download this repo<br><br>
+- Open a terminal (or <code>cd</code>) into "<i>craplog-javaGUI-main</i>". Make sure it is the folder containing the "<b>pom.xml</b>" file<br><br>
+- Use Maven to compile the entire project:<br>
+<code>mvn clean install</code><br><br>
+- Use Maven again to download and compile the required dependencies/plugins:<br>
+<code>mvn dependency:copy-dependencies</code><br><br>
+- At this point you should see a new folder named "<b>target</b>", which contains the <b>jar</b> archive along with other folders<br><br>
+- The newely created <i>.jar</i> is a standalone and can be executed in two ways:<br><br><br>
+<b>option 1</b>:<br>
+- Open the <i>.jar</i> archive, open the <i>META-INF</i> folder inside it and then modify the <i><b>MANIFEST.MF</b></i> file adding this line (the position in the file doesn't matter, just make sure to add it before the final carriage return):<br>
+<code>Main-Class: Main</code><br><br>
+- Save and update the jar archive<br><br>
+- To run Craplog, just use this command (replace the <i>/path/to/craplog</i> to fit yours, and the <i>version number</i> you have!):<br>
+<code>java -jar /path/to/craplog/CRAPLOG-version.jar</code><br><br><br>
+<b>option 2</b>:<br>
+- As the above, but without modifying the <i>MANIFEST.MF</i> file and directly using this command instead:<br>
+<code>java -cp /path/to/craplog/CRAPLOG-version.jar Main</code><br><br><br><br>
+- You can now move the jar file (just the archive! you'll not need the other folders created during compilation) wherever you want and execute it from there. A pre-made folder can be found inside "<i>craplog-javaGUI-main</i>", which contains the configurations file (you'll need it, otherwise you'll have default settings at every run) and the crapstats directory (default to contain the statistics files created, can be modified in the configurations). This folder can be then renamed and/or moved anywhere (better before the first run)<br><br>
+<b>Tip</b>: you can make a <i>craplog.sh</i> (bash) file containing the command of the option you choose and move it inside <i>/bin</i> or <i>/usr/bin</i> to be able to run Craplog from terminal<br>
+<b>Pro-tip</b>: you can then make a craplog.desktop file containing the informations to the <i>craplog.sh</i> script, and then move the <i>craplog.desktop</i> file inside <i>~/.local/share/applications</i> to have a menu entry for Craplog
+<br>
 <br>
 <br><hr><br>
 <br>
@@ -93,7 +126,7 @@ CRAPLOG is no more meant to be ran daily :)<br>
 <br>
 You can store statistics wherever you want.<br>
 <br>
-Four fields will be examined while parsing <b>access</b> logs:<br>
+Four fields may be examined while parsing <b>access</b> logs:<br>
 - IP address of the client<br>
 - Requested page/URL<br>
 - Response code from the server<br>
