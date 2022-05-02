@@ -30,9 +30,7 @@ public class craplog {
     
     private boolean processing;
 
-    private String logs_dir;
-    private String stats_dir;
-    private String trash_dir;
+    private String jar_path, logs_dir, stats_dir, trash_dir;
     
     private final HashMap<String,String> proceed;
     private final ArrayList<Path> undo; // used in case of fire to delete newely created paths and/or rename-back moved files
@@ -46,12 +44,13 @@ public class craplog {
     private int postArchiveType;
     private boolean postDelete, postToTrash;
     
-    public craplog() {
+    public craplog( String jar_path ) {
         
         this.processing = false;
         
+        this.jar_path  = jar_path;
         this.logs_dir  = "/var/log/apache2";
-        this.stats_dir = Paths.get("crapstats").toAbsolutePath().toString();
+        this.stats_dir = Paths.get(String.format("%s/crapstats",jar_path)).toAbsolutePath().toString();
         this.trash_dir = String.format("%s/.local/share/Trash/files",System.getProperty("user.home"));
         
         this.proceed = new HashMap<>();
@@ -96,8 +95,8 @@ public class craplog {
         this.proceed.replace("state", "true");
         this.InitialChecks( target_files );
         terminal_emu.append(this.MSG_DONE);
-        this.increaseProgress( progress_bar, terminal_emu, 5 );
         if (this.proceed.get("state").equals("true")) {
+            this.increaseProgress( progress_bar, terminal_emu, 5 );
             ArrayList<String> data_array;
             // parse log files to collect fields items
             data_array = this.ReadLogs( target_files );
@@ -313,7 +312,7 @@ public class craplog {
     
     
     private void readConfigs() {
-        Path path = Paths.get("src/main/java/crapsets/craplog.conf").toAbsolutePath();
+        Path path = Paths.get(String.format("%s/craplog.conf",this.jar_path)).toAbsolutePath();
         // attempt reading
         try {
             InputStream f_in = Files.newInputStream( path );
@@ -322,7 +321,11 @@ public class craplog {
             String[] read = new String( buff_in.readAllBytes() ).split("\n");
             // assign paths
             this.logs_dir  = this.stripTrailing( Paths.get( read[0].trim() ).toAbsolutePath().toString(), '/');
-            this.stats_dir = this.stripTrailing( Paths.get( read[1].trim() ).toAbsolutePath().toString(), '/');
+            if ( read[1].trim().equals("crapstats") ) {
+                this.stats_dir = this.stripTrailing( Paths.get(String.format("%s/crapstats",this.jar_path )).toAbsolutePath().toString(), '/');
+            } else {
+                this.stats_dir = this.stripTrailing( Paths.get( read[1].trim() ).toAbsolutePath().toString(), '/');
+            }
             if ( read[2].trim().startsWith("~/") ) {
                 String tmp = read[2].trim().substring(2);
                 this.trash_dir = String.format("%s/%s",System.getProperty("user.home"),tmp);
@@ -371,7 +374,7 @@ public class craplog {
     }
     
     public void saveConfigs() {
-        Path path = Paths.get("src/main/java/crapsets/craplog.conf").toAbsolutePath();
+        Path path = Paths.get(String.format("%s/craplog.conf",this.jar_path)).toAbsolutePath();
         // make the file content
         String write = "";
         // assign paths
