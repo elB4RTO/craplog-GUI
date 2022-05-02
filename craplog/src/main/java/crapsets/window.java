@@ -7,6 +7,8 @@ import java.awt.Font;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.InvalidPathException;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -48,6 +50,7 @@ public final class window extends javax.swing.JFrame {
         this.jTextFieldLOGS.setText(  this.craplog.getLogsDir() );
         this.jTextFieldSTATS.setText( this.craplog.getStatsDir() );
         this.jTextFieldTRASH.setText( this.craplog.getTrashDir() );
+        this.checkAllPaths();
         this.ip_skip.clear();
         for ( String ip : this.craplog.getSkipIPs() ) {
             this.ip_skip.addElement(ip);
@@ -69,6 +72,74 @@ public final class window extends javax.swing.JFrame {
             
         }
     }
+    
+    
+    private void mkdir( String path ) {
+        // remove trailing slashes if any
+        while (true) {
+            if ( path.endsWith("/") ) {
+                path = path.substring( 0, path.length()-2 );
+            } else {
+                break;
+            }
+        }
+        // create a new directory
+        try {
+            Files.createDirectory( Paths.get(path) );
+            JOptionPane.showMessageDialog(null, String.format("New directory created:\n'%s'",path), "Directory created succesfully", 1);
+        
+        } catch (InvalidPathException | NullPointerException e) {
+            JOptionPane.showMessageDialog(null, String.format("The inserted path is not valid:\n'%s'",path), "Invalid path", 0);
+            
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, String.format("An error occured while creating directory:\n'%s'",path), "Error making directory", 0);
+        }
+    }
+    
+    
+    private void checkAllPaths() {
+        // logs path
+        this.checkLogsPath();
+        // stats path
+        this.checkStatsPath();
+        // trash path
+        this.checkTrashPath();
+        // enable/disable the OK button
+        this.checkOK();
+    }
+    
+    private void checkLogsPath() {
+        if ( Files.exists( Paths.get( this.jTextFieldLOGS.getText() )) ) {
+            this.jLabelWARN1.setEnabled(false);
+        } else {
+            this.jLabelWARN1.setEnabled(true);
+        }
+    }
+    
+    private void checkStatsPath() {
+        if ( Files.exists( Paths.get( this.jTextFieldSTATS.getText() )) ) {
+            this.jLabelWARN2.setEnabled(false);
+            this.jButtonNEW2.setEnabled(false);
+            this.jButtonNEW2.setVisible(false);
+        } else {
+            this.jLabelWARN2.setEnabled(true);
+            this.jButtonNEW2.setEnabled(true);
+            this.jButtonNEW2.setVisible(true);
+        }
+    }
+    
+    private void checkTrashPath() {
+        if ( Files.exists( Paths.get( this.jTextFieldTRASH.getText() )) ) {
+            this.jLabelWARN3.setEnabled(false);
+            this.jButtonNEW3.setEnabled(false);
+            this.jButtonNEW3.setVisible(false);
+        } else {
+            this.jLabelWARN3.setEnabled(true);
+            this.jButtonNEW3.setEnabled(true);
+            this.jButtonNEW3.setVisible(true);
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -92,6 +163,8 @@ public final class window extends javax.swing.JFrame {
         jLabelWARN1 = new javax.swing.JLabel();
         jLabelWARN2 = new javax.swing.JLabel();
         jLabelWARN3 = new javax.swing.JLabel();
+        jButtonNEW3 = new javax.swing.JButton();
+        jButtonNEW2 = new javax.swing.JButton();
         jPanelIPS = new javax.swing.JPanel();
         jLabelIPtitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -189,6 +262,28 @@ public final class window extends javax.swing.JFrame {
         jLabelWARN3.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/null.png"))); // NOI18N
         jLabelWARN3.setEnabled(false);
 
+        jButtonNEW3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/new.png"))); // NOI18N
+        jButtonNEW3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jButtonNEW3.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/null.png"))); // NOI18N
+        jButtonNEW3.setEnabled(false);
+        jButtonNEW3.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButtonNEW3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNEW3ActionPerformed(evt);
+            }
+        });
+
+        jButtonNEW2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/new.png"))); // NOI18N
+        jButtonNEW2.setBorder(null);
+        jButtonNEW2.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/null.png"))); // NOI18N
+        jButtonNEW2.setEnabled(false);
+        jButtonNEW2.setPreferredSize(new java.awt.Dimension(24, 24));
+        jButtonNEW2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNEW2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelPATHSLayout = new javax.swing.GroupLayout(jPanelPATHS);
         jPanelPATHS.setLayout(jPanelPATHSLayout);
         jPanelPATHSLayout.setHorizontalGroup(
@@ -208,7 +303,11 @@ public final class window extends javax.swing.JFrame {
                     .addComponent(jLabelLOGS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextFieldTRASH, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                     .addComponent(jLabelPATHS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelPATHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonNEW3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonNEW2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanelPATHSLayout.setVerticalGroup(
             jPanelPATHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,14 +325,16 @@ public final class window extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelPATHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldSTATS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelWARN2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelWARN2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonNEW2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanelPATHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanelPATHSLayout.createSequentialGroup()
                         .addComponent(jLabelTRASH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldTRASH, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabelWARN3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelWARN3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonNEW3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
@@ -507,61 +608,37 @@ public final class window extends javax.swing.JFrame {
 
     private void jTextFieldLOGSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldLOGSActionPerformed
         // check the existence of the inserted path
-        if ( Files.exists( Paths.get( this.jTextFieldLOGS.getText() )) ) {
-            this.jLabelWARN1.setEnabled(false);
-        } else {
-            this.jLabelWARN1.setEnabled(true);
-        }
+        this.checkLogsPath();
         this.checkOK();
     }//GEN-LAST:event_jTextFieldLOGSActionPerformed
 
     private void jTextFieldSTATSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldSTATSActionPerformed
         // check the existence of the inserted path
-        if ( Files.exists( Paths.get( this.jTextFieldSTATS.getText() )) ) {
-            this.jLabelWARN2.setEnabled(false);
-        } else {
-            this.jLabelWARN2.setEnabled(true);
-        }
+        this.checkStatsPath();
         this.checkOK();
     }//GEN-LAST:event_jTextFieldSTATSActionPerformed
 
     private void jTextFieldTRASHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTRASHActionPerformed
         // check the existence of the inserted path
-        if ( Files.exists( Paths.get( this.jTextFieldTRASH.getText() )) ) {
-            this.jLabelWARN3.setEnabled(false);
-        } else {
-            this.jLabelWARN3.setEnabled(true);
-        }
+        this.checkTrashPath();
         this.checkOK();
     }//GEN-LAST:event_jTextFieldTRASHActionPerformed
 
     private void jTextFieldLOGSCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextFieldLOGSCaretUpdate
         // check the existence of the inserted path
-        if ( Files.exists( Paths.get( this.jTextFieldLOGS.getText() )) ) {
-            this.jLabelWARN1.setEnabled(false);
-        } else {
-            this.jLabelWARN1.setEnabled(true);
-        }
+        this.checkLogsPath();
         this.checkOK();
     }//GEN-LAST:event_jTextFieldLOGSCaretUpdate
 
     private void jTextFieldSTATSCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextFieldSTATSCaretUpdate
         // check the existence of the inserted path
-        if ( Files.exists( Paths.get( this.jTextFieldSTATS.getText() )) ) {
-            this.jLabelWARN2.setEnabled(false);
-        } else {
-            this.jLabelWARN2.setEnabled(true);
-        }
+        this.checkStatsPath();
         this.checkOK();
     }//GEN-LAST:event_jTextFieldSTATSCaretUpdate
 
     private void jTextFieldTRASHCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextFieldTRASHCaretUpdate
         // check the existence of the inserted path
-        if ( Files.exists( Paths.get( this.jTextFieldTRASH.getText() )) ) {
-            this.jLabelWARN3.setEnabled(false);
-        } else {
-            this.jLabelWARN3.setEnabled(true);
-        }
+        this.checkTrashPath();
         this.checkOK();
     }//GEN-LAST:event_jTextFieldTRASHCaretUpdate
 
@@ -616,12 +693,26 @@ public final class window extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonIPdelActionPerformed
 
+    private void jButtonNEW2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNEW2ActionPerformed
+        // create the new directory
+        this.mkdir( this.jTextFieldSTATS.getText().trim() );
+        this.jTextFieldSTATSActionPerformed( evt );
+    }//GEN-LAST:event_jButtonNEW2ActionPerformed
+
+    private void jButtonNEW3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNEW3ActionPerformed
+        // create the new directory
+        this.mkdir( this.jTextFieldTRASH.getText().trim() );
+        this.jTextFieldTRASHActionPerformed( evt );
+    }//GEN-LAST:event_jButtonNEW3ActionPerformed
+
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCANCEL;
     private javax.swing.JButton jButtonIPadd;
     private javax.swing.JButton jButtonIPdel;
+    private javax.swing.JButton jButtonNEW2;
+    private javax.swing.JButton jButtonNEW3;
     private javax.swing.JButton jButtonOK;
     private javax.swing.JLabel jLabelIPsub1;
     private javax.swing.JLabel jLabelIPsub2;
