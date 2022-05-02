@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class Main extends javax.swing.JFrame {
         this.jListERR.setModel(stat_names);
         this.jProgressBarWORK.setValue(0);
         
-        Main.craplog = new craplog();
+        Main.craplog = new craplog( this.getJarPath() );
         
         this.initArgsPanel();
         this.initStyle();
@@ -63,41 +65,82 @@ public class Main extends javax.swing.JFrame {
     
     
     private void initArgsPanel() {
+        // cascade checking
         if ( Main.craplog.getMakeSessions() == true ) {
             this.jCheckBoxSTATSsess.setSelected(true);
         }
         if ( Main.craplog.getUpdateGlobals()== true ) {
             this.jCheckBoxSTATSglob.setSelected(true);
         }
-        if ( Main.craplog.getParseError() == true ) {
-            this.jCheckBoxLOGSerr.setSelected(true);
-        }
-        if ( Main.craplog.getParseAccess() == true ) {
-            this.jCheckBoxLOGSacc.setSelected(true);
-            if ( Main.craplog.getParseIP() == true ) {
-                this.jCheckBoxACCip.setSelected(true);
+        // enable start if needed
+        if (Main.craplog.getMakeSessions()  == true
+        ||  Main.craplog.getUpdateGlobals() == true ) {
+            
+            if ( Main.craplog.getParseError() == true ) {
+                this.jCheckBoxLOGSerr.setSelected(true);
             }
-            if ( Main.craplog.getParseREQ() == true ) {
-                this.jCheckBoxACCreq.setSelected(true);
-            }
-            if ( Main.craplog.getParseRES() == true ) {
-                this.jCheckBoxACCres.setSelected(true);
-            }
-            if ( Main.craplog.getParseUA() == true ) {
-                this.jCheckBoxACCua.setSelected(true);
-            }
-            if (Main.craplog.getParseIP()  == false
-            &&  Main.craplog.getParseREQ() == false
-            &&  Main.craplog.getParseRES() == false
-            &&  Main.craplog.getParseUA()  == false ) {
-                Main.craplog.setParseAccessFalse();
-                this.jCheckBoxLOGSacc.setSelected(false);
+            if ( Main.craplog.getParseAccess() == true ) {
+                this.jCheckBoxLOGSacc.setSelected(true);
+                if ( Main.craplog.getParseIP() == true ) {
+                    this.jCheckBoxACCip.setSelected(true);
+                }
+                if ( Main.craplog.getParseREQ() == true ) {
+                    this.jCheckBoxACCreq.setSelected(true);
+                }
+                if ( Main.craplog.getParseRES() == true ) {
+                    this.jCheckBoxACCres.setSelected(true);
+                }
+                if ( Main.craplog.getParseUA() == true ) {
+                    this.jCheckBoxACCua.setSelected(true);
+                }
+                if (Main.craplog.getParseIP()  == false
+                &&  Main.craplog.getParseREQ() == false
+                &&  Main.craplog.getParseRES() == false
+                &&  Main.craplog.getParseUA()  == false ) {
+                    Main.craplog.setParseAccessFalse();
+                    this.jCheckBoxLOGSacc.setSelected(false);
+                    this.jCheckBoxACCip.setEnabled(false);
+                    this.jCheckBoxACCreq.setEnabled(false);
+                    this.jCheckBoxACCres.setEnabled(false);
+                    this.jCheckBoxACCua.setEnabled(false);
+                }
+            } else {
+                Main.craplog.setParseIPFalse();
                 this.jCheckBoxACCip.setEnabled(false);
+                Main.craplog.setParseREQFalse();
                 this.jCheckBoxACCreq.setEnabled(false);
+                Main.craplog.setParseRESFalse();
                 this.jCheckBoxACCres.setEnabled(false);
+                Main.craplog.setParseUAFalse();
                 this.jCheckBoxACCua.setEnabled(false);
             }
+            if (Main.craplog.getParseAccess() == true
+            ||  Main.craplog.getParseError()  == true ) {
+                this.jButtonSTART.setEnabled(true);
+            }
+            this.jComboBoxARCHIVEtype.setSelectedIndex( Main.craplog.getPostArchiveType() );
+            if ( Main.craplog.getPostBackup() == true ) {
+                this.jCheckBoxPOSTbackup.setSelected(true);
+                if ( Main.craplog.getPostArchive() == true ) {
+                    this.jCheckBoxPOSTarchive.setSelected(true);
+                }
+            } else {
+                Main.craplog.setPostArchiveFalse();
+                this.jCheckBoxPOSTarchive.setEnabled(false);
+                this.jComboBoxARCHIVEtype.setEnabled(false);
+            }
+            if ( Main.craplog.getPostDelete() == true ) {
+                this.jCheckBoxPOSTdelete.setSelected(true);
+                if ( Main.craplog.getPostTrash() == true ) {
+                    this.jCheckBoxPOSTtrash.setSelected(true);
+                }
+            } else {
+                Main.craplog.setPostTrashFalse();
+                this.jCheckBoxPOSTtrash.setEnabled(false);
+            }
         } else {
+            this.jCheckBoxLOGSerr.setEnabled(false);
+            this.jCheckBoxLOGSacc.setEnabled(false);
             Main.craplog.setParseIPFalse();
             this.jCheckBoxACCip.setEnabled(false);
             Main.craplog.setParseREQFalse();
@@ -106,34 +149,11 @@ public class Main extends javax.swing.JFrame {
             this.jCheckBoxACCres.setEnabled(false);
             Main.craplog.setParseUAFalse();
             this.jCheckBoxACCua.setEnabled(false);
-        }
-        // enable start if needed
-        if (Main.craplog.getMakeSessions()  == true
-        ||  Main.craplog.getUpdateGlobals() == true ) {
-            if (Main.craplog.getParseAccess() == true
-            ||  Main.craplog.getParseError()  == true ) {
-                this.jButtonSTART.setEnabled(true);
-            }
-            if ( Main.craplog.getPostBackup() == true ) {
-                this.jCheckBoxPOSTbackup.setSelected(true);
-            }
-            if ( Main.craplog.getPostArchive() == true ) {
-                this.jCheckBoxPOSTarchive.setSelected(true);
-            }
-            this.jComboBoxARCHIVEtype.setSelectedIndex( Main.craplog.getPostArchiveType() );
-            if ( Main.craplog.getPostDelete() == true ) {
-                this.jCheckBoxPOSTdelete.setSelected(true);
-            }
-            if ( Main.craplog.getPostTrash() == true ) {
-                this.jCheckBoxPOSTtrash.setSelected(true);
-            }
-        } else {
-            this.jCheckBoxLOGSacc.setEnabled(false);
-            this.jCheckBoxLOGSerr.setEnabled(false);
             Main.craplog.setPostBackupFalse();
             this.jCheckBoxPOSTbackup.setEnabled(false);
             Main.craplog.setPostArchiveFalse();
             this.jCheckBoxPOSTarchive.setEnabled(false);
+            this.jComboBoxARCHIVEtype.setSelectedIndex( Main.craplog.getPostArchiveType() );
             this.jComboBoxARCHIVEtype.setEnabled(false);
             Main.craplog.setPostDeleteFalse();
             this.jCheckBoxPOSTdelete.setEnabled(false);
@@ -224,6 +244,35 @@ public class Main extends javax.swing.JFrame {
                     this.jButtonLOGSview.setFont( this.main_font.deriveFont(18f) );
                     // output side
                     this.jTextPaneLOGS.setFont( this.terminal_font.deriveFont(1,15f) );
+    }
+    
+    
+    private String getJarPath() {
+        String path = new String();
+        try {
+            String path_ = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            path = URLDecoder.decode(path_, "UTF-8");
+            if ( path.endsWith(".jar") ) {
+                int i = 0;
+                while (true) {
+                    if ( path.indexOf('/', i+1) > 1 ) {
+                        i = path.indexOf('/', i+1);
+                    } else {
+                        break;
+                    }
+                }
+                path = path.substring(0, i);
+            } else {
+                throw new Exception(String.format("An error occured while parsing Craplog JAR's path.\nNot a jar file:\n'%s'",path));
+            }
+        
+        } catch (UnsupportedEncodingException e) {
+            JOptionPane.showMessageDialog(null, "An error occured while defining Craplog JAR's path.\n\nPlease report this issue", "Unable to find JAR path", 0);
+        
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Problem with JAR file", 0);
+        }
+        return path;
     }
     
     
