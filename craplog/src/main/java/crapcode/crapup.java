@@ -18,9 +18,9 @@ public class crapup {
     public static int CheckUpdates() {
         // 0: no, 1: yes, -1: an error occured
         int update_available = 0;
-      
+        
         String version_mark   = ".:!¦version¦!:.";
-        String actual_version = "1.0";
+        String actual_version = "1.01";
         String version_check_link = "https://github.com/elB4RTO/craplog-javaGUI/blob/main/version_check";
         String repository_link    = "https://github.com/elB4RTO/craplog-javaGUI";
         String issues_link        = "https://github.com/elB4RTO/craplog-javaGUI/issues";
