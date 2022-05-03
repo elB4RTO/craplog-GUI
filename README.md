@@ -5,14 +5,14 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
 <br>
 ``` diff
 - !!! THIS REPOSITORY IS NOT FULLY ACTIVE YET !!!
-- COMPILATION/INSTALLATION SUPPORT FILES ARE NOT PRESENT AT THE TIME
+- INSTALLATION SUPPORT FILES ARE NOT PRESENT AT THE TIME
 ```
 
 <br>
 CRAPLOG is a tool that takes Apache2 logs in their default form, parses them and creates simple statistics.<br>
 <br>
 <br>
-This fully Graphical version of CRAPLOG allows you to work on single-session log files (<i>*.log.1</i>, for instance), or to select multiple files to use (eg. older logs/gzipped-logs files).<br>
+This fully Graphical version of CRAPLOG allows you to work on single-session log files (<i>*.log.1</i>), or to select multiple files to use (eg. older logs/gzipped-logs files).<br>
 <br>
 <img src="https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1a.png">
 <br>
@@ -65,8 +65,8 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 <i>Slackware</i>:<br><code>sudo slackpkg install apache-maven</code><br><br>
 <i>Void</i>:<br><code>sudo xbps-install apache-maven-bin</code><br><br>
 <i>FreeBSD</i>:<br><code>sudo pkg install maven</code><br><br><br>
-- Download this repo<br><br>
-- Open a terminal (or <code>cd</code>) into "<i>craplog-javaGUI-main</i>". Make sure it is the folder containing the "<b>pom.xml</b>" file<br><br>
+- Download (and unzip if needed) this repo<br><br>
+- Open a terminal (or <code>cd</code>) into "<i>craplog-javaGUI-main/craplog</i>". Make sure it is the folder containing the "<b>pom.xml</b>" file<br><br>
 - Use Maven to compile the entire project:<br>
 <code>mvn clean install</code><br><br>
 - Use Maven again to download and compile the required dependencies/plugins:<br>
