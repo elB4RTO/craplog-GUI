@@ -2,6 +2,6 @@ This folder can be used to hold the final compiled .jar archive.
 
 This folder can be renamed to fit your needs, but better do it before the first run.
 
-This folder contains a configurations file (craplog.conf) used to save user preferences. The file MUST be in the JAR's parent folder (the one containing it).
+This folder contains a configurations file (craplog.conf) used to save user preferences. The file MUST be in the JAR's parent folder (the one containing it: in this case, this folder).
 
-This folder contains a default folder to hold statistics files (crapstats). It can be renamed, deleted or moved wherever in the filesystem if the appropriate changes are made to the configurations (can be done through the settings menu, while running craplog).
+This folder contains a default folder to hold statistics files (crapstats), which you can delete, rename or move wherever in the filesystem if the appropriate changes are made to the configurations (can be done through the settings menu, while running craplog).
