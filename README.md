@@ -34,7 +34,7 @@ It is also possible to display the log files contained in the logs folder, to di
 
 ![image](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java3.png)
 
-<br><br>
+<br>
 
 Searching for something different? Try the <a href="https://github.com/elB4RTO/CRAPLOG">other versions of CRAPLOG</a>.
 
