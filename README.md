@@ -5,13 +5,13 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
 
 ``` diff
 - !!! THIS REPOSITORY IS NOT FULLY ACTIVE YET !!!
-- INSTALLATION SUPPORT FILES ARE NOT PRESENT AT THE TIME
+- INSTALLATION SUPPORT FILES ARE NOT PRESENT AT THE TIME OF WRITING
 ```
 <br>
 
 ## Table of contents
 
-- [Description](https://github.com/elB4RTO/craplog-javaGUI#Description)
+- [Overview](#overview)
 - [Installation and usage](#installation-and-usage)
   - [Requirements, dependencies and plugins](#requirements--dependencies--plugins)
   - [Usage without installation](#usage-without-installation)
@@ -21,6 +21,8 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
   - [Default logs path](#default-logs-path)
   - [Default logs structure](#default-logs-structure)
 - [Statistics](#statistics)
+  - [Storage](#storage)
+  - [Examined fields](#examined-fields)
   - [Sessions statistics](#sessions-statistics)
   - [Global statistics](#global-statistics)
   - [Whitelist](#whitelist)
@@ -29,9 +31,9 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
   - [Backups](#backups)
 - [Contributions](#contributions)
 
-<br>
+<br><br>
 
-## Description
+## Overview
 
 CRAPLOG is a tool that takes Apache2 logs in their default form, parses them and creates simple statistics.
 
@@ -73,9 +75,14 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 ### Usage without installation
 
-`[...]`
-
-`[...]`
+- Download a pre-compiled [Release](https://github.com/elB4RTO/craplog-javaGUI/releases)
+  <br>*or*<br>
+  Follow the step-by-step "[How to compile](#how-to-compile)" guide
+  
+- Execute the *jar* file by using your installed **Java Runtime Environment** (usually *openJDK*)
+  <br>*or*<br>
+  By using this command from terminal (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
+  <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
 
 <br>
 
@@ -89,7 +96,7 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 ### How to compile
 
-- Install the Maven Project Manager from your system's package manager:<br>
+- Install the **Maven Project Manager** from your system's package manager:<br>
   * *Debian / Ubuntu / Mint / ...*
     <br>`sudo apt install maven`<br>
 
@@ -110,25 +117,33 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
   * *FreeBSD*
     <br>`sudo pkg install maven`<br><br>
-- Download (and unzip if needed) this repo
-- Open a terminal (or `cd`) into "*craplog-javaGUI-main/craplog*". Make sure it is the folder containing the "**pom.xml**" file<br><br>
-- Use Maven to compile the entire project:<br>`mvn clean install`
-- Use Maven again to download and compile the required dependencies/plugins:<br>`mvn dependency:copy-dependencies`
-- At this point you should see a new folder named "**target**", which contains the **jar** archive along with other folders.<br>
-  The newely created *jar* is a standalone and can be executed in two ways:<br><br>
+- Download and unzip this repo
+  <br>*or*<br>
+  `git clone https://github.com/elB4RTO/craplog-javaGUI`<br><br>
+- Open a terminal inside "*craplog-javaGUI-main/craplog*"
+  <br>*or*<br>
+  `cd craplog-javaGUI/craplog`<br><br>
+- Make sure you're inside the folder containing the "**pom.xml**" file
+  <br>`if [ -e "./pom.xml" ]; then echo "You're good to go!"; else echo "Hmm... no, wrong location"; fi`<br><br>
+- Use **Maven** to compile the entire project:
+  <br>`mvn clean install`
+- Use **Maven** again to *download and compile* the required dependencies/plugins inside the *jar*:
+  <br>`mvn dependency:copy-dependencies`
+- At this point you should see a new folder named "**target**", which contains the **jar** archive along with other folders.
+  <br>The newely created *jar* is a standalone and can be executed in two ways:<br><br>
 - **option 1**:
-  - Open the *.jar* archive, open the *META-INF* folder inside it and then modify the ***MANIFEST.MF*** file adding this line (the position in the file doesn't matter, just make sure to add it before the final carriage return): `Main-Class: Main`
+  - Open the *jar* archive, open the *META-INF* folder inside it and then modify the ***MANIFEST.MF*** file adding this line (the position in the file doesn't matter, just make sure to add it before the final carriage return): `Main-Class: Main`
   - Save and update the jar archive
-  - To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and the *version number* you have!):
+  - To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
     <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
 - **option 2**:
   - As the above, but without modifying the *MANIFEST.MF* file and directly using this command instead:<br>`java -cp /path/to/craplog/CRAPLOG-version.jar Main`<br><br>
 - You can now move the jar file (just the archive! you'll not need the other folders created during compilation) wherever you want and execute it from there.<br>
-A pre-made folder can be found inside "*craplog-javaGUI-main*", which contains the configurations file (you'll need it, otherwise you'll have default settings at every run) and the crapstats directory (default to contain the statistics files created, can be modified in the configurations). This folder can be then renamed and/or moved anywhere (better before the first run)<br><br>
+A pre-made folder can be found at "*craplog-javaGUI/pre-made_folder*", which contains the configurations file (you'll need it, otherwise you'll have default settings at every run) and the crapstats directory (default to contain the statistics files created, can be modified in the configurations). This folder can be then renamed and/or moved anywhere (better before the first run)<br><br>
 
 **Tip**: you can make a *craplog* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog)) containing the command of the option you choose and move it inside */bin* or */usr/bin* to be able to run Craplog from terminal
 
-**ProTip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)) containing the informations to the *craplog.sh* script, and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
+**ProTip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)) containing the informations to the *craplog* script (it must be present inside your bins!) and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
 
 <br>
 
@@ -159,9 +174,15 @@ IP - - [DATE:TIME] "REQUEST URI" RESPONSE "FROM URI" "USER AGENT"<br>
 
 ## Statistics
 
-You can now store statistics wherever you want.
+### Storage
+
+You can now store statistics wherever you want by modifyng the path to be used from the *Settings menu*.<br>
+While running Craplog select `Preferences`→`Settings`>`Paths`.<br><br>
+Be aware that modifiyng a path which already contains statistics files/folders, will **not** move the contents in the new location!
 
 <br>
+
+### Examined fields
 
 Four fields can be examined while parsing **access** logs:
 - IP address of the client
@@ -179,21 +200,24 @@ While parsing **error** logs, only two fields will be used:
 
 ### Sessions statistics
 
-CRAPLOG will olny take '**\*.log.\***' files as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full log stack of an entire (past) day.<br>
-Running it against a *today*'s file (which is not complete yet) may lead to re-running it in the future on the same file, parsing the same lines twice.<br>
-CRAPLOG is no more meant to be ran daily :)
+Sessions are made by grouping statistics depending on the date of the single lines of every parsed log file and will be stored consequently: a new folder will be made if that date is not present yet, or the content will be merged if it already exists.<br><br>
+Olny '**\*.log.\***' files will be taken as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full logs stack of an entire (past) day.<br>
+Running it against a *today*'s file (which is not complete yet) may lead to re-running it in the future on the same file, parsing the same lines twice.<br><br>
+Craplog is no more meant to be ran daily, since archived log files can be used as well as normal log files
+
+<br>
 
 ### Global statistics
 
-Additionally, GLOBAL statistics may be created and/or updated consequently to session statistics.<br>
+Additionally, GLOBAL statistics may be created and/or updated *consequently* to SESSION statistics.<br>
 These statistics are identical to the session ones, in fact they're just merged sessions, for a larger view.
 
 <br>
 
 ### Whitelist
 
-You can now add IP addresses to this list (may them be full *IPs*, only a the *net-ID* part or just a portion of your choice), in order to skip the relative lines by whitelisting (or blacklisting..?) them, in both **access** and **error** logs.<br>
-Please notice that the given sequence must be the starting part: it's not possible (at the moment, and more likely also in future versions) to skip IPs ending or just containing that sequence.<br>
+You can now add IP addresses to this list (may them be full *IPs*, only a the *net-ID* part or just a portion of your choice), in order to skip the relative lines by whitelisting (or blacklisting..?) them, in both **access** and **error** logs.<br><br>
+Please notice that the given sequence must be the starting part: it's not possible (at the moment, and more likely also in future versions) to skip IPs ending or just containing that sequence.<br><br>
 As an example, if you insert "123", then only IP addresses starting with that sequence will be skipped.<br>
 If you insert ".1", then nothing will be skipped, since no IP will ever start with a dot.<br>
 But the shortcut "::1" is used by Apache2 for internal connections and will therefore be valid to skip those lines.
@@ -203,8 +227,6 @@ But the shortcut "::1" is used by Apache2 for internal connections and will ther
 <br>
 
 ## Final considerations
-
-<br>
 
 ### Estimated working speed
 
@@ -218,10 +240,11 @@ If CRAPLOG takes more than 1 minute for a 10 MB file, you've probably been teste
 ### Backups
 
 CRAPLOG will automatically make backups of GLOBAL statistic files (in case of fire).<br>
-If something goes wrong and you lose your actual GLOBAL files, you can recover them (at least the last backup).<br>
+If something goes wrong and you lose your actual GLOBAL files, you can recover them (at least the last backup).<br><br>
 Move inside the folder you choose to store statistics in (if you don't remember the path, you can open the `Preferences`→`Settings`>`Paths` menu, to view it. Beware that modifiyng a path which already contains statistics, will not move the files/folders in the new location), open the "**globals**" folder, show hidden files and open the folder named "**.backups**'. Here you will find the last 3 backups taken.<br>
-Folder named '3' is always the oldest and '1' the newest.<br>
-Starting by this version, a new BACKUP is made every time you run CRAPLOG successfully over GLOBALS.
+Folder named '3' is always the oldest and '1' the newest.<br><br>
+Starting by this version, a new BACKUP is made every time you run Craplog *successfully* over GLOBALS.<br><br>
+Please notice that SESSION statistics will **not** be backed-up
 
 <br>
 
