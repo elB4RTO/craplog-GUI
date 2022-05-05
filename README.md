@@ -9,6 +9,28 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
 ```
 <br>
 
+## Table of contents
+
+- [Description](https://github.com/elB4RTO/craplog-javaGUI#Description)
+- [Installation and usage](#installation-and-usage)
+  - [Requirements, dependencies and plugins](#requirements--dependencies--plugins)
+  - [Usage without installation](#usage-without-installation)
+  - [Usage with installation](#usage-with-installation)
+  - [How to compile](#how-to-compile)
+- [Log files](#log-files)
+  - [Default logs path](#default-logs-path)
+  - [Default logs structure](#default-logs-structure)
+- [Statistics](#statistics)
+  - [Sessions statistics](#sessions-statistics)
+  - [Global statistics](#global-statistics)
+  - [Whitelist](#whitelist)
+- [Final considerations](#final-considerations)
+  - [Estimated working speed](#estimated-working-speed)
+  - [Backups](#backups)
+- [Contributions](#contributions)
+
+<br>
+
 ## Description
 
 CRAPLOG is a tool that takes Apache2 logs in their default form, parses them and creates simple statistics.
@@ -17,37 +39,39 @@ CRAPLOG is a tool that takes Apache2 logs in their default form, parses them and
 
 This fully Graphical version of CRAPLOG allows you to work on single-session log files (*\*.log.1*), or to select multiple files to use (eg. older logs/gzipped-logs files).
 
-![image](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1a.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1a.png)
 
-![image](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1b.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1b.png)
 
 <br>
 
 Differently from the other versions, this version of CRAPLOG will store statistics depending on the date of the single lines, to give more imporance to times and to analyze/backtrack statistics more easily.<br>
 Be aware that log-files usage is not tracked, be careful of not parsing the same logs twice, which will lead to altered statistics.
 
-![image](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java2.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java2.png)
 
 <br>
 
 It is also possible to display the log files contained in the logs folder, to directly view their content.
 
-![image](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java3.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java3.png)
 
-<br>
+<br><br>
 
 Searching for something different? Try the <a href="https://github.com/elB4RTO/CRAPLOG">other versions of CRAPLOG</a>.
 
 <br>
 
-## Minimum requirements / Dependencies / Plugins
+## Installation and usage
+
+### Requirements / Dependencies / Plugins
 - *JavaSE 11*
 - *Maven plugins*
 - *Apache common compress*
 
 <br>
 
-## Usage without installation
+### Usage without installation
 
 `[...]`
 
@@ -55,7 +79,7 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 <br>
 
-## Usage with installation
+### Usage with installation
 
 `[missing]`
 
@@ -63,27 +87,27 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 <br>
 
-## How to compile
+### How to compile
 
 - Install the Maven Project Manager from your system's package manager:<br>
   * *Debian / Ubuntu / Mint / ...*
     <br>`sudo apt install maven`<br>
-  
+
   * *Arch / Manjaro / ...*
     <br>`sudo pacman -S maven`<br>
-  
+
   * *Fedora*
     <br>`sudo dnf install maven`<br>
-  
+
   * *OpenSUSE*
     <br>`sudo zypper install maven`<br>
-  
+
   * *Slackware*
     <br>`sudo slackpkg install apache-maven`<br>
-  
+
   * *Void*
     <br>`sudo xbps-install apache-maven-bin`<br>
-  
+
   * *FreeBSD*
     <br>`sudo pkg install maven`<br><br>
 - Download (and unzip if needed) this repo
@@ -104,7 +128,7 @@ A pre-made folder can be found inside "*craplog-javaGUI-main*", which contains t
 
 **Tip**: you can make a *craplog* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog)) containing the command of the option you choose and move it inside */bin* or */usr/bin* to be able to run Craplog from terminal
 
-**Pro tip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)) containing the informations to the *craplog.sh* script, and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
+**ProTip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)) containing the informations to the *craplog.sh* script, and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
 
 <br>
 
@@ -114,38 +138,32 @@ At the moment, it still only supports **Apache2** log files in their **default**
 
 <br>
 
-*DEFAULT PATH:*
+### Default logs path
 
 /var/log/apache2/
 
 <br>
 
-*DEFAULT LOGS' STRUCTURE:*
+### Default logs structure
 
-**access.log.1**
-IP - - [DATE:TIME] "REQUEST URI" RESPONSE "FROM URI" "USER AGENT"
-123.123.123.123 - - [01/01/2000:00:10:20 +0000] "GET /style.css HTTP/1.1" 200 321 "/index.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Firefox/86.0"
+**access.log.1**<br>
+IP - - [DATE:TIME] "REQUEST URI" RESPONSE "FROM URI" "USER AGENT"<br>
+*123.123.123.123 - - [01/01/2000:00:10:20 +0000] "GET /style.css HTTP/1.1" 200 321 "/index.php" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Firefox/86.0"*
 
-**error.log.1**
-[DATE TIME] [LOG LEVEL] [PID] ERROR REPORT
-[Mon Jan 01 10:20:30.456789 2000] [headers:trace2] [pid 12345] mod_headers.c(874): AH01502: headers: ap_headers_output_filter()
 
-<br>
-
-*NOTE*:
-
-Please notice that CRAPLOG will olny take '***.log.***' files as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full log stack of an entire (past) day. Running it against a *today*'s file (which is not complete yet) may lead to re-running it in the future on the same file, parsing the same lines twice.<br>
-CRAPLOG is no more meant to be ran daily :)
+**error.log.1**<br>
+[DATE TIME] [LOG LEVEL] [PID] ERROR REPORT<br>
+*[Mon Jan 01 10:20:30.456789 2000] [headers:trace2] [pid 12345] mod_headers.c(874): AH01502: headers: ap_headers_output_filter()*
 
 <br>
 
 ## Statistics
 
-You can store statistics wherever you want.
+You can now store statistics wherever you want.
 
 <br>
 
-Four fields may be examined while parsing **access** logs:
+Four fields can be examined while parsing **access** logs:
 - IP address of the client
 - Requested page/URL
 - Response code from the server
@@ -159,7 +177,13 @@ While parsing **error** logs, only two fields will be used:
 
 <br>
 
-GLOBAL STATISTICS FILES:
+### Sessions statistics
+
+CRAPLOG will olny take '**\*.log.\***' files as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full log stack of an entire (past) day.<br>
+Running it against a *today*'s file (which is not complete yet) may lead to re-running it in the future on the same file, parsing the same lines twice.<br>
+CRAPLOG is no more meant to be ran daily :)
+
+### Global statistics
 
 Additionally, GLOBAL statistics may be created and/or updated consequently to session statistics.<br>
 These statistics are identical to the session ones, in fact they're just merged sessions, for a larger view.
@@ -168,11 +192,13 @@ These statistics are identical to the session ones, in fact they're just merged 
 
 ### Whitelist
 
-You can now add IP addresses to this list (may them be full IPs, only a the net-ID part or just a portion of your choice), in order to skip the relative lines by whitelisting (or blacklisting..?) them, in both **access** and **error** logs.<br>
-Please notice that the given sequence must be the starting part: it's not possible (at the moment, and more likely also in future versions) to skip IPs endings or just containing that sequence.<br>
-As an example, if you insert "123", then only IP addresses starting with that sequence will be skipped; if you insert ".1", then nothing will be skipped, since it is considered invalid, but the shortcut "::1" is used by Apache2 for internal connections and will therefore be valid to skip those lines.
+You can now add IP addresses to this list (may them be full *IPs*, only a the *net-ID* part or just a portion of your choice), in order to skip the relative lines by whitelisting (or blacklisting..?) them, in both **access** and **error** logs.<br>
+Please notice that the given sequence must be the starting part: it's not possible (at the moment, and more likely also in future versions) to skip IPs ending or just containing that sequence.<br>
+As an example, if you insert "123", then only IP addresses starting with that sequence will be skipped.<br>
+If you insert ".1", then nothing will be skipped, since no IP will ever start with a dot.<br>
+But the shortcut "::1" is used by Apache2 for internal connections and will therefore be valid to skip those lines.
 
-![image](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java4.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java4.png)
 
 <br>
 
@@ -180,7 +206,7 @@ As an example, if you insert "123", then only IP addresses starting with that se
 
 <br>
 
-ESTIMATED WORKING SPEED:
+### Estimated working speed
 
 1~8 sec / 1 MB
 
@@ -189,7 +215,7 @@ If CRAPLOG takes more than 1 minute for a 10 MB file, you've probably been teste
 
 <br>
 
-BACKUPS:
+### Backups
 
 CRAPLOG will automatically make backups of GLOBAL statistic files (in case of fire).<br>
 If something goes wrong and you lose your actual GLOBAL files, you can recover them (at least the last backup).<br>
