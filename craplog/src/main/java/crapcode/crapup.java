@@ -20,14 +20,14 @@ public class crapup {
         int update_available = 0;
         
         String version_mark   = ".:!¦version¦!:.";
-        String actual_version = "1.01";
+        String actual_version = "5.02";
         String version_check_link = "https://github.com/elB4RTO/craplog-javaGUI/blob/main/version_check";
         String repository_link    = "https://github.com/elB4RTO/craplog-javaGUI";
         String issues_link        = "https://github.com/elB4RTO/craplog-javaGUI/issues";
         
         try {
             // request the page
-            URL version_page = new URL( version_check_link );
+            URL version_page   = new URL( version_check_link );
             URLConnection page = version_page.openConnection();
             BufferedReader buff_in = new BufferedReader( new InputStreamReader( page.getInputStream() ));
             // search the version string inside the page
@@ -35,8 +35,7 @@ public class crapup {
             String line = new String();
             try {
                 while ((line = buff_in.readLine()) != null) {
-                    if ( line.contains("pathlib") ) {
-                    //if ( line.contains( version_mark ) ) {
+                    if ( line.contains( version_mark ) ) {
                         found = true;
                         break;
                     }
