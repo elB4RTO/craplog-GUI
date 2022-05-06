@@ -6,7 +6,7 @@ import java.awt.FontFormatException;
 
 import java.awt.event.KeyEvent;
 
-import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
 
 public class crapnote extends javax.swing.JFrame {
@@ -18,12 +18,13 @@ public class crapnote extends javax.swing.JFrame {
     public crapnote() {
         initComponents();
         
-        this.font_path = "./src/main/java/assets/font/Metropolis.ttf";
         this.font_size = 15f;
         try {
-            this.font = Font.createFont( Font.TRUETYPE_FONT, new File(font_path) );
+            InputStream fs = getClass().getResourceAsStream("/fonts/Metropolis.ttf");
+            this.font = Font.createFont( Font.TRUETYPE_FONT, fs );
+            
         } catch (FontFormatException | IOException e) {
-            System.out.println("Unable to load font");
+            System.out.println("Unable to load font: 'Metropolis.ttf'");
         }
         this.font = this.font.deriveFont( Font.PLAIN, this.font_size );
         this.jTextFieldSIZE.setText( String.format("%.0f",this.font_size) );
@@ -54,6 +55,7 @@ public class crapnote extends javax.swing.JFrame {
         setBackground(new java.awt.Color(30, 30, 30));
         setMinimumSize(new java.awt.Dimension(156, 128));
         setName("frameNOTE"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(512, 512));
 
         jPanelNOTE.setBackground(new java.awt.Color(255, 238, 119));
         jPanelNOTE.setMinimumSize(new java.awt.Dimension(160, 128));
@@ -180,9 +182,9 @@ public class crapnote extends javax.swing.JFrame {
             jPanelNOTELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelNOTELayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPaneBLOCK, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPaneBLOCK, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jPanelZOOM, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+            .addComponent(jPanelZOOM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelNOTELayout.setVerticalGroup(
             jPanelNOTELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +199,7 @@ public class crapnote extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanelNOTE, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+            .addComponent(jPanelNOTE, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
