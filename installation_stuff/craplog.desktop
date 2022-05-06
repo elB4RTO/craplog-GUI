@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Craplog
+GenericName=Craplog
+Comment=A tool to make statistics from Apache2 logs
+Icon=craplog
+Exec=craplog
+Actions=
+Categories=Utility;
+Keywords=craplog;apache2;logs;statistics;
