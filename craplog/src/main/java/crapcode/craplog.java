@@ -54,7 +54,7 @@ public class craplog {
         this.trash_dir = String.format("%s/.local/share/Trash/files",System.getProperty("user.home"));
         
         this.proceed = new HashMap<>();
-        proceed.put("state", "true");
+        this.proceed.put("state", "true");
         this.undo = new ArrayList<>();
         
         this.makeSessionStats  = false;
@@ -420,11 +420,19 @@ public class craplog {
         // attempt writing
         try {
             // make a backup copy of the actual configs
-            try {
-                Files.move( path, Paths.get(new_path) );
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while copying configurations file:\n'%s'\n\nUnable to temporary store a backup of the file.\nWriting aborted",path), "Error writing configurations", 0);
-                throw new Exception("skip");
+            if (Files.notExists( path )) {
+                // no original configuration file, make a new one
+                if ( JOptionPane.showConfirmDialog(null, String.format("No previous configurations file was found,\ncreate a new one?"), "Configurations warning", 2) == JOptionPane.CANCEL_OPTION ) {
+                    throw new Exception("skip");
+                }
+            } else {
+                // backup the original file
+                try {
+                    Files.move( path, Paths.get(new_path) );
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, String.format("An error occured while copying configurations file:\n'%s'\n\nUnable to temporary store a backup of the file.\nWriting aborted",path), "Error writing configurations", 0);
+                    throw new Exception("skip");
+                }
             }
             // write the new file
             OutputStream f_out = Files.newOutputStream( path );
