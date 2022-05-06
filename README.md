@@ -79,7 +79,7 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
   <br>*or*<br>
   Follow the step-by-step "[How to compile](#how-to-compile)" guide
   
-- Execute the *jar* file by using your installed **Java Runtime Environment** (usually *openJDK*)
+- Execute the *jar* file by using your installed **Java Runtime Environment** (usually *openJDK jre*)
   <br>*or*<br>
   By using this command from terminal (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
   <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
@@ -88,9 +88,19 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 ### Usage with installation
 
-`[missing]`
-
-`[missing]`
+- **From source**
+  - Download and unzip this repo
+    <br>*or*<br>
+    `git clone https://github.com/elB4RTO/craplog-javaGUI`<br><br>
+  - Open a terminal inside "*craplog-javaGUI-main/craplog*"
+    <br>*or*<br>
+    `cd craplog-javaGUI/craplog`<br><br>
+  - Run the installation script
+    <br>`chmod +x ./build_install.sh && ./build_install.sh`<br><br>
+- **From binary**
+  - Download a pre-compiled [Release](https://github.com/elB4RTO/craplog-javaGUI/releases)
+  - Run the installation script
+    <br>`chmod +x ./install.sh && ./install.sh`<br><br>
 
 <br>
 
@@ -124,20 +134,13 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
   <br>*or*<br>
   `cd craplog-javaGUI/craplog`<br><br>
 - Make sure you're inside the folder containing the "**pom.xml**" file
-  <br>`if [ -e "./pom.xml" ]; then echo "You're good to go!"; else echo "Hmm... no, wrong location"; fi`<br><br>
+  <br>`if [ -f "./pom.xml" ]; then echo "You're good to go!"; else echo "Hmm... no, wrong location"; fi`<br><br>
 - Use **Maven** to compile the entire project:
   <br>`mvn clean install`
-- Use **Maven** again to *download and compile* the required dependencies/plugins inside the *jar*:
-  <br>`mvn dependency:copy-dependencies`
 - At this point you should see a new folder named "**target**", which contains the **jar** archive along with other folders.
-  <br>The newely created *jar* is a standalone and can be executed in two ways:<br><br>
-- **option 1**:
-  - Open the *jar* archive, open the *META-INF* folder inside it and then modify the ***MANIFEST.MF*** file adding this line (the position in the file doesn't matter, just make sure to add it before the final carriage return): `Main-Class: Main`
-  - Save and update the jar archive
-  - To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
-    <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
-- **option 2**:
-  - As the above, but without modifying the *MANIFEST.MF* file and directly using this command instead:<br>`java -cp /path/to/craplog/CRAPLOG-version.jar Main`<br><br>
+  <br>The newely created *jar* is a standalone (can be portable)<br><br>
+- To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
+  <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
 - You can now move the jar file (just the archive! you'll not need the other folders created during compilation) wherever you want and execute it from there.<br>
 A pre-made folder can be found at "*craplog-javaGUI/pre-made_folder*", which contains the configurations file (you'll need it, otherwise you'll have default settings at every run) and the crapstats directory (default to contain the statistics files created, can be modified in the configurations). This folder can be then renamed and/or moved anywhere (better before the first run)<br><br>
 
