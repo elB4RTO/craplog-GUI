@@ -267,10 +267,14 @@ public class Main extends javax.swing.JFrame {
             }
         
         } catch (UnsupportedEncodingException e) {
-            JOptionPane.showMessageDialog(null, "An error occured while defining Craplog JAR's path.\n\nPlease report this issue", "Unable to find JAR path", 0);
+            JOptionPane.showMessageDialog(null,
+                "An error occured while defining Craplog JAR's path.\n\nPlease report this issue",
+                "Unable to find JAR's path", 0);
         
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Problem with JAR file", 0);
+            JOptionPane.showMessageDialog(null,
+                e.getMessage(),
+                "Problem with the JAR file", 0);
         }
         return path;
     }
@@ -1593,7 +1597,9 @@ public class Main extends javax.swing.JFrame {
             Main.craplog.Crapstart( this.jProgressBarWORK, this.jTextAreaOUTPUT, this.target_files );
             this.jProgressBarWORK.setValue(0);
         } else {
-            JOptionPane.showMessageDialog(null, "Please select one or more files to work on", "No file selected", 2);
+            JOptionPane.showMessageDialog(null,
+                "Please select one or more files to work on",
+                "No file selected", 2);
         }
     }//GEN-LAST:event_jButtonSTARTActionPerformed
 
@@ -1817,11 +1823,15 @@ public class Main extends javax.swing.JFrame {
         // check version updates
         int result = crapcode.crapup.CheckUpdates();
         if ( result == 0 ) {
-            JOptionPane.showMessageDialog(null, "Craplog is up-to-date", "No update available", 1);
+            JOptionPane.showMessageDialog(null,
+                "Craplog is up-to-date",
+                "No update available", 1);
         } else if ( result == 1 ) {
-            JOptionPane.showMessageDialog(null, "A new version of Craplog is available:\nhttps://github.com/elB4RTO/craplog-javaGUI", "Update available", 2);
+            JOptionPane.showMessageDialog(null,
+                "A new version of Craplog is available:\nhttps://github.com/elB4RTO/craplog-javaGUI",
+                "Update available", 2);
         }
-        // error messages already shown, skip here
+        // error messages already shown, skip here (if -1)
     }//GEN-LAST:event_jMenuItemUPDATESActionPerformed
 
     private void jTabbedPaneSTATSStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneSTATSStateChanged
