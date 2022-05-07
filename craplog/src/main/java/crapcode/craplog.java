@@ -230,13 +230,14 @@ public class craplog {
         List<String> target_files
     ) {
         
-        // remove needed copy-files/copy-folders
-        ioutils.undoPaths(this.proceed, this.undo);
         
         if (this.proceed.get("state").equals("true")) {
+            // remove now-unneeded copy-files/copy-folders, this makes previous actions unreversible
+            ioutils.undoPaths(this.proceed, this.undo);
         
-            // backup original files
-            if ( this.postBackup == true ) {
+            if (this.proceed.get("state").equals("true")
+            &&  this.postBackup == true ) {
+                // backup original files
                 this.increaseProgress( progress_bar, terminal_emu, 80 );
                 String backup_date = LocalDate.now().toString();
                 backup.backupOriginalFiles(
@@ -245,7 +246,8 @@ public class craplog {
                     this.logs_dir, target_files );
 
                 // compress the backup
-                if ( this.postArchive == true ) {
+                if (this.proceed.get("state").equals("true")
+                &&  this.postArchive == true ) {
                     // use the selected compression
                     backup.compressBackups(
                         this.proceed, this.undo,
@@ -272,7 +274,15 @@ public class craplog {
         this.increaseProgress( progress_bar, terminal_emu, 95 );
         if (this.proceed.get("state").equals("false")) {
             // only clean if something failed
-            ioutils.undoPaths(this.proceed, this.undo);
+            ioutils.undoPaths( this.proceed, this.undo );
+        
+        } else if ( this.updateGlobalStats == true ) {
+            // make previous post-work actions unreversible at this point
+            undo.clear();
+            // make a backup of globals (if worked on globals)
+            backup.backupGlobals( this.proceed, this.undo, this.stats_dir );
+            // do appropriate cleanings
+            ioutils.undoPaths( this.proceed, this.undo );
         }
         // clear arrays and hashmaps
         this.undo.clear();
@@ -314,11 +324,12 @@ public class craplog {
     private void readConfigs() {
         Path path = Paths.get(String.format("%s/craplog.conf",this.jar_path)).toAbsolutePath();
         // attempt reading
+        String[] read = {};
         try {
             InputStream f_in = Files.newInputStream( path );
             BufferedInputStream buff_in = new BufferedInputStream( f_in );
             // get data
-            String[] read = new String( buff_in.readAllBytes() ).split("\n");
+            read = new String( buff_in.readAllBytes() ).split("\n");
             // assign paths
             this.logs_dir  = this.stripTrailing( Paths.get( read[0].trim() ).toAbsolutePath().toString(), '/');
             if ( read[1].trim().equals("crapstats") ) {
@@ -362,13 +373,24 @@ public class craplog {
             f_in.close();
         
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while searching for configurations file:\n'%s'\n\nUnable to load configuration settings",path), "Configurations file not found", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while searching for configurations file:\n'%s'\n\nUnable to load configuration settings",path),
+                "Configurations file not found", 0);
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while reading configurations file:\n'%s'\n\nUnable to load configuration settings",path), "Error reading configurations", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while reading configurations file:\n'%s'\n\nUnable to load configuration settings",path),
+                "Error reading configurations", 0);
 
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while formatting archiveType:\n'%s'\n\nUnable to load configuration settings",read[15]),
+                "Number format error", 0);
+        
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while handling configurations file:\n'%s'\n\nUnable to load configuration settings",path), "Generic error", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while handling configurations file:\n'%s'\n\nUnable to load configuration settings",path),
+                "Generic error", 0);
         }
         
     }
@@ -422,7 +444,10 @@ public class craplog {
             // make a backup copy of the actual configs
             if (Files.notExists( path )) {
                 // no original configuration file, make a new one
-                if ( JOptionPane.showConfirmDialog(null, String.format("No previous configurations file was found,\ncreate a new one?"), "Configurations warning", 2) == JOptionPane.CANCEL_OPTION ) {
+                int choice = JOptionPane.showConfirmDialog(null,
+                    String.format("No previous configurations file was found,\ncreate a new one?"),
+                    "Configurations warning", 2);
+                if ( choice == JOptionPane.CANCEL_OPTION ) {
                     throw new Exception("skip");
                 }
             } else {
@@ -430,7 +455,9 @@ public class craplog {
                 try {
                     Files.move( path, Paths.get(new_path) );
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, String.format("An error occured while copying configurations file:\n'%s'\n\nUnable to temporary store a backup of the file.\nWriting aborted",path), "Error writing configurations", 0);
+                    JOptionPane.showMessageDialog(null,
+                        String.format("An error occured while copying configurations file:\n'%s'\n\nUnable to temporary store a backup of the file.\nWriting aborted",path),
+                        "Error writing configurations", 0);
                     throw new Exception("skip");
                 }
             }
@@ -445,11 +472,15 @@ public class craplog {
             try {
                 Files.delete( Paths.get(new_path) );
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while removing temporary\ncopy of configurations file:\n'%s'\n\nPlease remove it manually",path), "Error removing temporary copy", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while removing temporary\ncopy of configurations file:\n'%s'\n\nPlease remove it manually",path),
+                    "Error removing temporary copy", 0);
             }
         
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while writing configurations file:\n'%s'",path), "Error writing configurations", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while writing configurations file:\n'%s'",path),
+                "Error writing configurations", 0);
             // writing failed, restore previous configs
             try {
                 // delete the possibly corrupted file
@@ -457,10 +488,14 @@ public class craplog {
                 try {
                     Files.move( Paths.get(new_path), path );
                 } catch (IOException ee) {
-                    JOptionPane.showMessageDialog(null, String.format("An error occured while restoring configurations file:\n'%s'\n\nPlease manually restore it, removing the trailing '.copy' extension\nto restore your previous configuration",new_path), "Error writing configurations", 0);
+                    JOptionPane.showMessageDialog(null,
+                        String.format("An error occured while restoring configurations file:\n'%s'\n\nPlease manually restore it, removing the trailing '.copy' extension\nto restore your previous configuration",new_path),
+                        "Error writing configurations", 0);
                 }
             } catch (IOException eee) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while removing newly created configurations file:\n'%s'\n\nPlease remove it manually\nand restore the old configuratio file\n(the one with a trailing '.copy' extension)",path), "Error removing file", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while removing newly created configurations file:\n'%s'\n\nPlease remove it manually\nand restore the old configuratio file\n(the one with a trailing '.copy' extension)",path),
+                    "Error removing file", 0);
             }
         
         } catch (Exception e) {
