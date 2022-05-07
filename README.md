@@ -26,6 +26,9 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
   - [Sessions statistics](#sessions-statistics)
   - [Global statistics](#global-statistics)
   - [Whitelist](#whitelist)
+- [Extra features](#extra-features)
+  - [Note-block](#note-block)
+  - [Updates-chec](#updates-check)
 - [Final considerations](#final-considerations)
   - [Estimated working speed](#estimated-working-speed)
   - [Backups](#backups)
@@ -106,41 +109,51 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 ### How to compile
 
-- Install the **Maven Project Manager** from your system's package manager:<br>
-  * *Debian / Ubuntu / Mint / ...*
-    <br>`sudo apt install maven`<br>
+- Check if you already installed the **Maven Project Manager**:
+  <br>`if [[ $(which mvn) =~ ^/ ]]; then echo "You're good to go\!"; else echo "You must install Maven to continue\!"; fi`
+  
+  If you're **not** seeing the "***You're good to go!***" response, follow the next step before to proceed
+  - Install the **Maven Project Manager** from your system's package manager:<br>
+    * *Debian / Ubuntu / Mint / ...*
+      <br>`sudo apt install maven`<br>
 
-  * *Arch / Manjaro / ...*
-    <br>`sudo pacman -S maven`<br>
+    * *Arch / Manjaro / ...*
+      <br>`sudo pacman -S maven`<br>
 
-  * *Fedora*
-    <br>`sudo dnf install maven`<br>
+    * *Fedora*
+      <br>`sudo dnf install maven`<br>
 
-  * *OpenSUSE*
-    <br>`sudo zypper install maven`<br>
+    * *OpenSUSE*
+      <br>`sudo zypper install maven`<br>
 
-  * *Slackware*
-    <br>`sudo slackpkg install apache-maven`<br>
+    * *Slackware*
+      <br>`sudo slackpkg install apache-maven`<br>
 
-  * *Void*
-    <br>`sudo xbps-install apache-maven-bin`<br>
+    * *Void*
+      <br>`sudo xbps-install apache-maven-bin`<br>
 
-  * *FreeBSD*
-    <br>`sudo pkg install maven`<br><br>
+    * *FreeBSD*
+      <br>`sudo pkg install maven`<br><br>
 - Download and unzip this repo
   <br>*or*<br>
-  `git clone https://github.com/elB4RTO/craplog-javaGUI`<br><br>
+  `git clone https://github.com/elB4RTO/craplog-javaGUI`
+  
 - Open a terminal inside "*craplog-javaGUI-main/craplog*"
   <br>*or*<br>
-  `cd craplog-javaGUI/craplog`<br><br>
+  `cd craplog-javaGUI/craplog/`<br><br>
 - Make sure you're inside the folder containing the "**pom.xml**" file
-  <br>`if [ -f "./pom.xml" ]; then echo "You're good to go!"; else echo "Hmm... no, wrong location"; fi`<br><br>
+  <br>`if [ -f "./pom.xml" ]; then echo "You're good to go\!"; else echo "Hmm... no, wrong location"; fi`
+  
 - Use **Maven** to compile the entire project:
   <br>`mvn clean install`
-- At this point you should see a new folder named "**target**", which contains the **jar** archive along with other folders.
-  <br>The newely created *jar* is a standalone (can be portable)<br><br>
+  
+- At this point you should see a new folder named "**target**", which should contain two **jar** archive along with other folders.
+  <br>The file named "*CRAPLOG-version.jar*" will make use of dynamic libraries, it's slightly smaller but dependent from the system.
+  <br>The file named "*CRAPLOG-version-jar-with-dependencies.jar*" is a standalone: can be portable, it only needs *JRE* to run and is therefore the ***suggested*** one. You can rename it as you please, for example as "*CRAPLOG-version.jar*" using this command:
+  <br>`version=$(ls | grep jar-with-dependencies | cut -d \- -f2 | cut -d \. -f1,2) && rm CRAPLOG-$version.jar && mv CRAPLOG-$version-jar-with-dependencies.jar CRAPLOG-$version.jar`<br><br>
 - To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
-  <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
+  <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`
+  
 - You can now move the jar file (just the archive! you'll not need the other folders created during compilation) wherever you want and execute it from there.<br>
 A pre-made folder can be found at "*craplog-javaGUI/pre-made_folder*", which contains the configurations file (you'll need it, otherwise you'll have default settings at every run) and the crapstats directory (default to contain the statistics files created, can be modified in the configurations). This folder can be then renamed and/or moved anywhere (better before the first run)<br><br>
 
@@ -148,7 +161,7 @@ A pre-made folder can be found at "*craplog-javaGUI/pre-made_folder*", which con
 
 **ProTip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)) containing the informations to the *craplog* script (it must be present inside your bins!) and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
 
-<br>
+<br><br>
 
 ## Log files
 
@@ -173,7 +186,7 @@ IP - - [DATE:TIME] "REQUEST URI" RESPONSE "FROM URI" "USER AGENT"<br>
 [DATE TIME] [LOG LEVEL] [PID] ERROR REPORT<br>
 *[Mon Jan 01 10:20:30.456789 2000] [headers:trace2] [pid 12345] mod_headers.c(874): AH01502: headers: ap_headers_output_filter()*
 
-<br>
+<br><br>
 
 ## Statistics
 
@@ -227,7 +240,21 @@ But the shortcut "::1" is used by Apache2 for internal connections and will ther
 
 ![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java4.png)
 
+<br><br>
+
+## Extra features
+
+### Note-block
+
+A note-block utility is available at `Utilities`→`Note` which can be used to temporary write text, notes, etcs
+
 <br>
+
+### Updates-check
+
+You can use `Utilities`→`Check updates` to query this repo and receive informations about version-updates. No update will be done though, the utility just checks the version number: the *download&update* has to be done manually
+
+<br><br>
 
 ## Final considerations
 
@@ -249,7 +276,7 @@ Folder named '3' is always the oldest and '1' the newest.<br><br>
 Starting by this version, a new BACKUP is made every time you run Craplog *successfully* over GLOBALS.<br><br>
 Please notice that SESSION statistics will **not** be backed-up
 
-<br>
+<br><br>
 
 ## Contributions
 
