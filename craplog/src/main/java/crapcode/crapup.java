@@ -16,19 +16,20 @@ import java.io.IOException;
 public class crapup {
 
     public static int CheckUpdates() {
-        // 0: no, 1: yes, -1: an error occured
-        int update_available = 0;
-        
-        String version_mark   = ".:!¦version¦!:.";
-        String actual_version = "5.02";
+        // 0: up-to-date, 1: update available, -1: something failed
+        int update_available  = 0;
+        // this version
+        String actual_version = "5.03";
+        // version-check auxiliaries
+        String version_mark       = ".:!¦version¦!:.";
         String version_check_link = "https://github.com/elB4RTO/craplog-javaGUI/blob/main/version_check";
         String repository_link    = "https://github.com/elB4RTO/craplog-javaGUI";
         String issues_link        = "https://github.com/elB4RTO/craplog-javaGUI/issues";
         
         try {
             // request the page
-            URL version_page   = new URL( version_check_link );
-            URLConnection page = version_page.openConnection();
+            URL version_page       = new URL( version_check_link );
+            URLConnection page     = version_page.openConnection();
             BufferedReader buff_in = new BufferedReader( new InputStreamReader( page.getInputStream() ));
             // search the version string inside the page
             boolean found = false;
@@ -48,10 +49,12 @@ public class crapup {
             if ( found == false ) {
                 throw new Exception(String.format("Can't find the version control line inside the page.\nThe version actually in use is: %s\nPlease visit this page to manually check for new a version:\n%s\n%s",actual_version,version_check_link,repository_link));
             }
-            // compare versions
+            
+            // cut away the new version number
             String new_version = line.substring(
                 line.indexOf( version_mark ) + version_mark.length(),
                 line.indexOf( version_mark, line.indexOf( version_mark ) + version_mark.length() )).trim();
+            // compare versions
             if ( !actual_version.equals(new_version) ) {
                 float actual = 0;
                 float check  = 0;
@@ -70,15 +73,23 @@ public class crapup {
         
         } catch (MalformedURLException e) {
             update_available = -1;
-            JOptionPane.showMessageDialog(null, String.format("Malformed version-check URL:\n%s\nPlease report this issue here:\n%s",version_check_link,issues_link), "Malformed URL", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("Malformed version-check URL:\n%s\nPlease report this issue here:\n%s",
+                    version_check_link,issues_link),
+                "Malformed URL", 0);
             
         } catch (IOException e) {
             update_available = -1;
-            JOptionPane.showMessageDialog(null, String.format("An error occured while connecting to:\n%s\n\nPlease check your connection or try again later.\nIf you can manually reach the page, please report this issue here:\n%s",version_check_link,issues_link), "Connection failed", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while connecting to:\n%s\n\nPlease check your connection or try again later.\nIf you can manually reach the page, please report this issue here:\n%s",
+                    version_check_link,issues_link),
+                "Connection failed", 0);
             
         } catch (Exception e) {
             update_available = -1;
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Something went wrong", 0);
+            JOptionPane.showMessageDialog(null,
+                e.getMessage(),
+                "Something went wrong", 0);
             
         }
         
