@@ -23,7 +23,7 @@ A tool that scrapes Apache2 logs to create both Session and Global statistics
 - [Statistics](#statistics)
   - [Storage](#storage)
   - [Examined fields](#examined-fields)
-  - [Sessions statistics](#sessions-statistics)
+  - [Session statistics](#session-statistics)
   - [Global statistics](#global-statistics)
   - [Whitelist](#whitelist)
 - [Extra features](#extra-features)
@@ -214,7 +214,7 @@ While parsing **error** logs, only two fields will be used:
 
 <br>
 
-### Sessions statistics
+### Session statistics
 
 Sessions are made by grouping statistics depending on the date of the single lines of every parsed log file and will be stored consequently: a new folder will be made if that date is not present yet, or the content will be merged if it already exists.<br><br>
 Olny '**\*.log.\***' files will be taken as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full logs stack of an entire (past) day.<br>
