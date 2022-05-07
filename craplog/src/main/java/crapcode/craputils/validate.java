@@ -28,25 +28,59 @@ public class validate {
         Path file_path = Paths.get( file_path_str );
         // check existence
         if (Files.notExists(file_path)) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while searching for file:\n'%s'",file_path), "File not found", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while searching for file:\n'%s'",file_path),
+                "File not found", 0);
             proceed.replace("state", "false");
         
         } else {
+            
+            // check the file size to warn about big ones
+            try {
+                float WARNING_SIZE = 104857600; // 100 MB
+                float file_size = Files.size(file_path);
+                if ( file_size >= WARNING_SIZE ) {
+                    // get the size in GB
+                    float size = file_size / 1073741824;
+                    String size_unit = "GB";
+                    if ( size < 1 ) {
+                        // if less than 1GB, get the size in MB
+                        size = file_size / 1048576;
+                        size_unit = "MB";
+                    }
+                    int choice = JOptionPane.showConfirmDialog(null,
+                        String.format("Huge file size found while checking:\n'%s'\nSize: %.2f %s\n\nHuge files can take a very long time to process\nPlease make sure this file is ok before to proceed\n\nContinue anyway?",
+                            file_path,size,size_unit),
+                        "WARNING", 0, 2);
+                    if ( choice == JOptionPane.CANCEL_OPTION ) {
+                        proceed.replace("state", "false");
+                    }
+                    
+                }
+            } catch (IOException e) {
+                
+            }
             
             // try reading as an archive
             try {
                 read = validate.tryArchive( file_path );
 
             } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while searching for archive:\n'%s'",file_path), "File not found", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while searching for archive:\n'%s'",file_path),
+                    "File not found", 0);
                 proceed.replace("state", "false");
 
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while reading archive:\n'%s'",file_path), "Error reading", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while reading archive:\n'%s'",file_path),
+                    "Error reading", 0);
                 proceed.replace("state", "false");
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Error handling archive", 0);
+                JOptionPane.showMessageDialog(null,
+                    e.getMessage(),
+                    "Error handling archive", 0);
                 proceed.replace("state", "false");
             }
             
@@ -58,15 +92,21 @@ public class validate {
                     read = validate.tryFile( file_path );
 
                 } catch (FileNotFoundException e) {
-                    JOptionPane.showMessageDialog(null, String.format("An error occured while searching for file:\n'%s'",file_path), "File not found", 0);
+                    JOptionPane.showMessageDialog(null,
+                        String.format("An error occured while searching for file:\n'%s'",file_path),
+                        "File not found", 0);
                     proceed.replace("state", "false");
 
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, String.format("An error occured while reading file:\n'%s'",file_path), "Error reading", 0);
+                    JOptionPane.showMessageDialog(null,
+                        String.format("An error occured while reading file:\n'%s'",file_path),
+                        "Error reading", 0);
                     proceed.replace("state", "false");
 
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error handling file", 0);
+                    JOptionPane.showMessageDialog(null,
+                        e.getMessage(),
+                        "Error handling file", 0);
                     proceed.replace("state", "false");
                 }
             }
