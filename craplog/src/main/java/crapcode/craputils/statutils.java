@@ -69,7 +69,9 @@ public class statutils {
             buff_in.close();
             f_in.close();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while reading old stat file:\n'%s'",path), "Error reading file", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while reading old stat file:\n'%s'",path),
+                "Error reading file", 0);
             proceed.replace("state", "false");
         }
         if (proceed.get("state").equals("true")) {
@@ -87,7 +89,10 @@ public class statutils {
                     try {
                         count = Integer.parseInt( line.substring(0, i) );
                     } catch (NumberFormatException e) {
-                        if ( JOptionPane.showConfirmDialog(null, String.format("Error retrieving count, the value cannot be converted to integer:\n'%s'\nThe complete line is:\n'%s'\nIf you didn't edit this file, please report this error.\nIgnore and continue?",count,line), "Not a number", 0, 2) == JOptionPane.NO_OPTION ) {
+                        int choice = JOptionPane.showConfirmDialog(null,
+                            String.format("Error retrieving count, the value cannot be converted to integer:\n'%s'\nThe complete line is:\n'%s'\nIf you didn't edit this file, please report this error.\nIgnore and continue?",count,line),
+                            "Not a number", 0, 2);
+                        if ( choice == JOptionPane.NO_OPTION ) {
                             proceed.replace("state", "false");
                             break;
                         }
@@ -99,7 +104,10 @@ public class statutils {
                             throw new Exception();
                         }
                     } catch (Exception e) {
-                        if ( JOptionPane.showConfirmDialog(null, String.format("Error retrieving item, nothing to use as string:\n'%s'\nThe complete line is:\n'%s'\nIf you didn't edit this file, please report this error.\nIgnore and continue?",item,line), "No string found", 0, 2) == JOptionPane.NO_OPTION ) {
+                        int choice = JOptionPane.showConfirmDialog(null,
+                            String.format("Error retrieving item, nothing to use as string:\n'%s'\nThe complete line is:\n'%s'\nIf you didn't edit this file, please report this error.\nIgnore and continue?",item,line),
+                            "No string found", 0, 2);
+                        if ( choice == JOptionPane.NO_OPTION ) {
                             proceed.replace("state", "false");
                             break;
                         }
@@ -114,7 +122,10 @@ public class statutils {
                         list.put(item, count);
                     }
                 } else {
-                    if ( JOptionPane.showConfirmDialog(null, String.format("Invalid line, cannot split in 'count-item':\n'%s'\nIf you didn't edit this file, please report this error.\nIgnore and continue?",line), "No separator found", 0, 2) == JOptionPane.NO_OPTION ) {
+                    int choice = JOptionPane.showConfirmDialog(null,
+                        String.format("Invalid line, cannot split in 'count-item':\n'%s'\nIf you didn't edit this file, please report this error.\nIgnore and continue?",line),
+                        "No separator found", 0, 2);
+                    if ( choice == JOptionPane.NO_OPTION ) {
                         proceed.replace("state", "false");
                         break;
                     }
