@@ -124,7 +124,10 @@ public class crapview {
                 if ( log_file.exists() ) {
                     // path exists
                     if ( log_file.isDirectory() ) {
-                        JOptionPane.showMessageDialog(null, String.format("An error occured with:\n'%s'\n\nIt was supposed to be a file, but it was found to be a directory",log_file.getAbsolutePath()), "File-type error", 2);
+                        JOptionPane.showMessageDialog(null,
+                            String.format("An error occured with:\n'%s'\n\nIt was supposed to be a file, but it was found to be a directory",
+                                log_file.getAbsolutePath()),
+                            "File-type error", 2);
                     } else {
                         String file_name = log_file.getName();
                         // only append files with default names
@@ -140,7 +143,10 @@ public class crapview {
                                     logs_list.addElement( file_name );
                                 } else {
                                     // warn for unreadable file
-                                    JOptionPane.showMessageDialog(null, String.format("Warning on file:\n'%s'\n\nThis file cannot be read.\nIf you was planning to use it,\nplease check permissions and retry",log_file.getAbsolutePath()), "File not readable", 1);
+                                    JOptionPane.showMessageDialog(null,
+                                        String.format("Warning on file:\n'%s'\n\nThis file cannot be read.\nIf you was planning to use it,\nplease check permissions and retry",
+                                            log_file.getAbsolutePath()),
+                                        "File not readable", 1);
                                 }
                             }
                         }
@@ -186,7 +192,10 @@ public class crapview {
                 if ( stat.exists() ) {
                     // path exists
                     if ( stat.isDirectory() ) {
-                        JOptionPane.showMessageDialog(null, String.format("An error occured with:\n'%s'\n\nIt was supposed to be a file, but it was found to be a directory",stat.getAbsolutePath()), "File-type error", 2);
+                        JOptionPane.showMessageDialog(null,
+                            String.format("An error occured with:\n'%s'\n\nIt was supposed to be a file, but it was found to be a directory",
+                                stat.getAbsolutePath()),
+                            "File-type error", 2);
                     } else {
                         names.addElement(session.getName());
                         paths.addElement(stat.getPath());
@@ -215,13 +224,19 @@ public class crapview {
             data = f.split("\n");
 
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while searching for file:\n'%s'",file), "File not found", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while searching for file:\n'%s'",file),
+                "File not found", 0);
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while reading file:\n'%s'",file), "Error reading", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while reading file:\n'%s'",file),
+                "Error reading", 0);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while parsing file:\n'%s'\n\nCorrupted file content",file), "Error handling file", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while parsing file:\n'%s'\n\nCorrupted file content",file),
+                "Error handling file", 0);
         }
         return data;
     }
@@ -277,7 +292,7 @@ public class crapview {
             for ( String line : stat_data ) {
                 separator = line.indexOf(' ');
                 count = Integer.parseInt( line.substring(0, separator) );
-                item = line.substring(separator+1);
+                item  = line.substring(separator+1);
                 m.addRow( new Object[] { item, count } );
             }
         }
