@@ -60,7 +60,10 @@ public class save {
                         if ( !Files.exists(path) ) {
                             ioutils.createDir(proceed, undo, path);
                         } else {
-                            if (JOptionPane.showConfirmDialog(null, String.format("WARNING!\nA directory with this same date already exists\n'%s'\n\nPlease make sure you're not parsing the same log file twice.\nContinue?",path), "Name conflict", 0, 3) == JOptionPane.NO_OPTION ) {
+                            int choice = JOptionPane.showConfirmDialog(null,
+                                String.format("WARNING!\nA directory with this same date already exists\n'%s'\n\nPlease make sure you're not parsing the same log file twice.\nContinue?",path),
+                                "Name conflict", 0, 3);
+                            if ( choice == JOptionPane.NO_OPTION ) {
                                 proceed.replace("state", "false");
                             }
                         }
