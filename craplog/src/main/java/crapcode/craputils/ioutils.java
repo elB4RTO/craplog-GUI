@@ -26,7 +26,9 @@ public class ioutils {
         Path new_path = Paths.get("./");
         int choice;
         if ( bypass == false ) {
-            choice = JOptionPane.showConfirmDialog(null, String.format("Conflict found while checking:\n'%s'\n\nThe conflict will be renamed with trailing '(copy)'.\nThe copy will be deleted at the end of the process if it succeeds,\nor restored in case something fails.\nChoosing 'NO' will abort the entire process.\nContinue?",path), "Name conflict", 0, 2);
+            choice = JOptionPane.showConfirmDialog(null,
+                String.format("Conflict found while checking:\n'%s'\n\nThe conflict will be renamed with trailing '(copy)'.\nThe copy will be deleted at the end of the process if it succeeds,\nor restored in case something fails.\nChoosing 'NO' will abort the entire process.\nContinue?",path),
+                "Name conflict", 0, 2);
         } else {
             choice = JOptionPane.OK_OPTION;
         }
@@ -44,7 +46,9 @@ public class ioutils {
                 Files.move( path, new_path );
                 undo.add( new_path );
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while renaming directory:\n'%s'",path), "Error renaming directory", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while renaming directory:\n'%s'",path),
+                    "Error renaming directory", 0);
                 proceed.replace("state", "false");
             }
         } else {
@@ -65,7 +69,9 @@ public class ioutils {
             // shouldn't need double checking existence here
             Files.move( path, new_path );
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while renaming directory:\n'%s'",path), "Error renaming directory", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while renaming directory:\n'%s'",path),
+                "Error renaming directory", 0);
         }
     }
     
@@ -78,7 +84,9 @@ public class ioutils {
         Path new_path = Paths.get("./");
         int choice;
         if ( bypass == false ) {
-            choice = JOptionPane.showConfirmDialog(null, String.format("Conflict found while checking:\n'%s'\n\nThe conflict will be renamed with trailing '(copy)'.\nThe copy will be deleted at the end of the process if it succeeds,\nor restored in case something fails.\nChoosing 'NO' will abort the entire process.\nContinue?",path), "Name conflict", 0, 2);
+            choice = JOptionPane.showConfirmDialog(null,
+                String.format("Conflict found while checking:\n'%s'\n\nThe conflict will be renamed with trailing '(copy)'.\nThe copy will be deleted at the end of the process if it succeeds,\nor restored in case something fails.\nChoosing 'NO' will abort the entire process.\nContinue?",path),
+                "Name conflict", 0, 2);
         } else {
             choice = JOptionPane.OK_OPTION;
         }
@@ -88,19 +96,10 @@ public class ioutils {
                 String p = path.toString();
                 String file_name = path.getFileName().toString();
                 String new_path_base = p.substring(0,p.indexOf(file_name)-1);
-                int i = 1;
-                while ( p.indexOf('.',i) != -1 ) {
-                    i = p.indexOf('.',i)+1;
-                }
-                String file_ext = "";
-                if ( i != 1 ) {
-                    // file has a declared extension
-                    file_ext = String.format(".%s",p.substring(i));
-                }
                 // try renaming the file
                 int n = 1;
                 while (true) {
-                    new_path = Paths.get(String.format("%s/%s_(copy_%s)%s",new_path_base,file_name,n,file_ext));
+                    new_path = Paths.get(String.format("%s/%s_(copy_%s)",new_path_base,file_name,n));
                     if (Files.notExists(new_path)) {
                         break;
                     } else {
@@ -110,7 +109,9 @@ public class ioutils {
                 Files.move( path, new_path );
                 undo.add( new_path );
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while renaming file:\n'%s'",path), "Error renaming file", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while renaming file:\n'%s'",path),
+                    "Error renaming file", 0);
                 proceed.replace("state", "false");
             }
         } else {
@@ -127,17 +128,13 @@ public class ioutils {
             while ( p.indexOf("_(copy_",i) != -1 ) {
                 i = p.indexOf("_(copy_",i)+1;
             }
-            String file_path = p.substring(0, i-1);
-            String file_ext  = "";
-            if (p.indexOf(").", i) != -1 ) {
-                file_ext = p.substring( p.indexOf(").", i+1) );
-            }
-            
-            Path new_path = Paths.get( String.format("%s%s",file_path,file_ext) );
+            Path new_path = Paths.get( p.substring(0, i-1) );
             // shouldn't need double checking existence here
             Files.move( path, new_path );
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while renaming file:\n'%s'",path), "Error renaming file", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while renaming file:\n'%s'",path),
+                "Error renaming file", 0);
         }
     }
     
@@ -151,8 +148,51 @@ public class ioutils {
             Files.createDirectory(path);
             undo.add(path);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while creating directory:\n'%s'",path), "Error making directory", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while creating directory:\n'%s'",path),
+                "Error making directory", 0);
             proceed.replace("state", "false");
+        }
+    }
+    
+    protected static void copyDirRecursive(
+        HashMap<String,String> proceed,
+        ArrayList<Path> undo,
+        Path orig_path_, Path copy_path_
+    
+    ) throws IOException {
+        // make a copy of every file/folder
+        File orig_dir = orig_path_.toFile();
+        Path orig_path, copy_path;
+        for ( File orig_item : orig_dir.listFiles() ) {
+            String item_name = orig_item.getName();
+            if ( !item_name.equals(".backups") ) {
+                orig_path = Paths.get(String.format("%s/%s", orig_path_,item_name));
+                copy_path = Paths.get(String.format("%s/%s", copy_path_,item_name));
+                // for both files/dirs, make a copy
+                Files.copy( orig_path, copy_path );
+                if ( orig_item.isDirectory() ) {
+                    // copy recursively
+                    ioutils.copyDirRecursive( proceed, undo, orig_path, copy_path );
+                }
+            }
+        }
+    }
+    
+    protected static void deleteDirRecursive(
+        HashMap<String,String> proceed,
+        ArrayList<Path> undo,
+        Path del_path_
+    
+    ) throws IOException {
+        // make a copy of every file/folder
+        File del_dir = del_path_.toFile();
+        Path del_path;
+        for ( File del_item : del_dir.listFiles() ) {
+            String item_name = del_item.getName();
+            del_path = Paths.get(String.format("%s/%s", del_path_,item_name));
+            // for both files/dirs, make a copy
+            ioutils.tryDelete( proceed, undo, del_path );
         }
     }
     
@@ -178,30 +218,51 @@ public class ioutils {
                 }
                 buff_out.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, String.format("An error occured while writing new file:\n'%s'",path), "Error writing on new file", 0);
+                JOptionPane.showMessageDialog(null,
+                    String.format("An error occured while writing new file:\n'%s'",path),
+                    "Error writing on new file", 0);
                 proceed.replace("state", "false");
             }
         }
     }
     
     
+    private static void tryDelete(
+        HashMap<String,String> proceed,
+        ArrayList<Path> undo,
+        Path del_path
+    ) throws IOException {
+        if ( Files.isDirectory(del_path) ) {
+            // delete recursively
+            ioutils.deleteDirRecursive( proceed, undo, del_path );
+            Files.delete( del_path );
+        } else {
+            // delete normally
+            Files.delete( del_path );
+        }
+    }
+    
     public static void undoPaths(
         HashMap<String,String> proceed,
         ArrayList<Path> undo
     ) {
+        
         if (proceed.get("state").equals("false")) {
             // if something failed, delete newely created files/folders
             ArrayList<Path> copies = new ArrayList<>();
             ArrayList<Path> retry  = new ArrayList<>();
             // delete new paths first
             for ( Path del_path : undo ) {
+                // put copies in the rename-back-stack
                 if (del_path.toString().contains("_(copy_")) {
                     copies.add( del_path );
-                }
-                try {
-                    Files.delete(del_path);
-                } catch (IOException e) {
-                    retry.add(del_path);
+                // delete new files
+                } else {
+                    try {
+                        ioutils.tryDelete( proceed, undo, del_path );
+                    } catch (IOException e) {
+                        retry.add( del_path );
+                    }
                 }
             }
             // then raname back the copies
@@ -218,9 +279,11 @@ public class ioutils {
             if ( !retry.isEmpty() ) {
                 for ( Path del_path : retry ) {
                     try {
-                        Files.delete(del_path);
+                        ioutils.tryDelete( proceed, undo, del_path );
                     } catch (IOException e) {
-                        JOptionPane.showMessageDialog(null, String.format("An error occured while removing:\n'%s'",del_path), "Error deleting file/folder", 0);
+                        JOptionPane.showMessageDialog(null,
+                            String.format("An error occured while removing:\n'%s'",del_path),
+                            "Error deleting file/folder", 0);
                     }
                 }
             copies.clear();
@@ -228,15 +291,16 @@ public class ioutils {
             }
         
         } else {
-            // remove the backup copies of replaced files
+            // only remove the backup copies of replaced files
             ArrayList<Path> retry = new ArrayList<>();
             // delete new paths first
             for ( Path del_path : undo ) {
                 if ( !del_path.toString().contains("_(copy_") ) {
+                    // not a copy
                     continue;
                 }
                 try {
-                    Files.delete(del_path);
+                    ioutils.tryDelete( proceed, undo, del_path );
                 } catch (IOException e) {
                     retry.add(del_path);
                 }
@@ -245,9 +309,11 @@ public class ioutils {
             if ( !retry.isEmpty() ) {
                 for ( Path del_path : retry ) {
                     try {
-                        Files.delete(del_path);
+                        ioutils.tryDelete( proceed, undo, del_path );
                     } catch (IOException e) {
-                        JOptionPane.showMessageDialog(null, String.format("An error occured while removing:\n'%s'",del_path), "Error deleting file/folder", 0);
+                        JOptionPane.showMessageDialog(null,
+                            String.format("An error occured while removing:\n'%s'",del_path),
+                            "Error deleting file/folder", 0);
                     }
                 }
             retry.clear();
