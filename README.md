@@ -28,7 +28,7 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
   - [Whitelist](#whitelist)
 - [Extra features](#extra-features)
   - [Note-block](#note-block)
-  - [Updates-chec](#updates-check)
+  - [Check updates](#check-updates)
 - [Final considerations](#final-considerations)
   - [Estimated working speed](#estimated-working-speed)
   - [Backups](#backups)
@@ -246,13 +246,14 @@ But the shortcut "::1" is used by Apache2 for internal connections and will ther
 
 ### Note-block
 
-A note-block utility is available at `Utilities`→`Note` which can be used to temporary write text, notes, etcs
+A note-block utility is available at `Utilities`→`Note` which can be used to temporary write text, notes, etc
 
 <br>
 
-### Updates-check
+### Check updates
 
-You can use `Utilities`→`Check updates` to query this repo and receive informations about version-updates. No update will be done though, the utility just checks the version number: the *download&update* has to be done manually
+You can use `Utilities`→`Check updates` to query this repo and receive informations about version-updates.<br>
+No update will be done though, the utility just checks the version number: the *download* has to be done manually, but a *build_update.sh* script is provided
 
 <br><br>
 
