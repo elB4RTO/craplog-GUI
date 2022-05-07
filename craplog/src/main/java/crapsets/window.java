@@ -86,13 +86,19 @@ public final class window extends javax.swing.JFrame {
         // create a new directory
         try {
             Files.createDirectory( Paths.get(path) );
-            JOptionPane.showMessageDialog(null, String.format("New directory created:\n'%s'",path), "Directory created succesfully", 1);
+            JOptionPane.showMessageDialog(null,
+                String.format("New directory created:\n'%s'",path),
+                "Directory created succesfully", 1);
         
         } catch (InvalidPathException | NullPointerException e) {
-            JOptionPane.showMessageDialog(null, String.format("The inserted path is not valid:\n'%s'",path), "Invalid path", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("The inserted path is not valid:\n'%s'",path),
+                "Invalid path", 0);
             
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("An error occured while creating directory:\n'%s'",path), "Error making directory", 0);
+            JOptionPane.showMessageDialog(null,
+                String.format("An error occured while creating directory:\n'%s'",path),
+                "Error making directory", 0);
         }
     }
     
@@ -597,7 +603,9 @@ public final class window extends javax.swing.JFrame {
             this.craplog.saveConfigs();
             this.setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(null, "Craplog is actually processing.\nPlease wait untill it finishes and retry", "Retry later", 2);
+            JOptionPane.showMessageDialog(null,
+                "Craplog is actually processing.\nPlease wait untill it finishes and retry",
+                "Retry later", 2);
         }
     }//GEN-LAST:event_jButtonOKActionPerformed
 
@@ -659,7 +667,9 @@ public final class window extends javax.swing.JFrame {
         if ( !this.ip_skip.contains( ip ) ) {
             this.ip_skip.addElement( ip );
         } else {
-            JOptionPane.showMessageDialog(null, "The inserted string is already present in the list", "Already exists", 1);
+            JOptionPane.showMessageDialog(null,
+                "The inserted string is already present in the list",
+                "Already exists", 1);
         }
     }//GEN-LAST:event_jButtonIPaddActionPerformed
 
