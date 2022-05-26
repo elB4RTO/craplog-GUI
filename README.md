@@ -59,7 +59,7 @@ It is also possible to display the log files contained in the logs folder, to di
 
 <br><br>
 
-Searching for something different? Try the <a href="https://github.com/elB4RTO/CRAPLOG">other versions of CRAPLOG</a>.
+Searching for something different? Try the [other versions of CRAPLOG](https://github.com/elB4RTO/CRAPLOG).
 
 <br>
 
