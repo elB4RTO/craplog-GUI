@@ -1,12 +1,6 @@
 # craplog-javaGUI
-A tool that scrapes Apache2 logs to create both Session and Global statistics
+A tool that scrapes Apache2 logs to create both Single-Session and Global statistics
 
-<br>
-
-``` diff
-- !!! THIS REPOSITORY IS NOT FULLY ACTIVE YET !!!
-- INSTALLATION SUPPORT FILES ARE NOT PRESENT AT THE TIME OF WRITING
-```
 <br>
 
 ## Table of contents
@@ -16,14 +10,16 @@ A tool that scrapes Apache2 logs to create both Session and Global statistics
   - [Requirements, dependencies and plugins](#requirements--dependencies--plugins)
   - [Usage without installation](#usage-without-installation)
   - [Usage with installation](#usage-with-installation)
+- [Compilation](#compilation)
   - [How to compile](#how-to-compile)
+  - [Additional steps](#additional-steps)
 - [Log files](#log-files)
   - [Default logs path](#default-logs-path)
   - [Default logs structure](#default-logs-structure)
 - [Statistics](#statistics)
   - [Storage](#storage)
   - [Examined fields](#examined-fields)
-  - [Session statistics](#session-statistics)
+  - [Sessions statistics](#sessions-statistics)
   - [Global statistics](#global-statistics)
   - [Whitelist](#whitelist)
 - [Extra features](#extra-features)
@@ -81,7 +77,7 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 - Download a pre-compiled [Release](https://github.com/elB4RTO/craplog-javaGUI/releases)
   <br>*or*<br>
   Follow the step-by-step "[How to compile](#how-to-compile)" guide
-  
+
 - Execute the *jar* file by using your installed **Java Runtime Environment** (usually *openJDK jre*)
   <br>*or*<br>
   By using this command from terminal (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
@@ -107,61 +103,81 @@ Searching for something different? Try the <a href="https://github.com/elB4RTO/C
 
 <br>
 
+## Compilation
+
 ### How to compile
 
-- Check if you already installed the **Maven Project Manager**:
-  <br>`if [[ $(which mvn) =~ ^/ ]]; then echo "You're good to go\!"; else echo "You must install Maven to continue\!"; fi`
-  
-  If you're **not** seeing the "***You're good to go!***" response, follow the next step before to proceed
-  - Install the **Maven Project Manager** from your system's package manager:<br>
-    * *Debian / Ubuntu / Mint / ...*
-      <br>`sudo apt install maven`<br>
+- Install the **Maven Project Manager** from your system's package manager:<br>
+  * *Debian / Ubuntu / Mint / ...*
+    <br>`sudo apt install maven`<br>
 
-    * *Arch / Manjaro / ...*
-      <br>`sudo pacman -S maven`<br>
+  * *Arch / Manjaro / ...*
+    <br>`sudo pacman -S maven`<br>
 
-    * *Fedora*
-      <br>`sudo dnf install maven`<br>
+  * *Fedora*
+    <br>`sudo dnf install maven`<br>
 
-    * *OpenSUSE*
-      <br>`sudo zypper install maven`<br>
+  * *OpenSUSE*
+    <br>`sudo zypper install maven`<br>
 
-    * *Slackware*
-      <br>`sudo slackpkg install apache-maven`<br>
+  * *Slackware*
+    <br>`sudo slackpkg install apache-maven`<br>
 
-    * *Void*
-      <br>`sudo xbps-install apache-maven-bin`<br>
+  * *Void*
+    <br>`sudo xbps-install apache-maven-bin`<br>
 
-    * *FreeBSD*
-      <br>`sudo pkg install maven`<br><br>
+  * *FreeBSD*
+    <br>`sudo pkg install maven`<br><br>
 - Download and unzip this repo
   <br>*or*<br>
-  `git clone https://github.com/elB4RTO/craplog-javaGUI`
-  
+  `git clone https://github.com/elB4RTO/craplog-javaGUI`<br><br>
 - Open a terminal inside "*craplog-javaGUI-main/craplog*"
   <br>*or*<br>
-  `cd craplog-javaGUI/craplog/`<br><br>
+  `cd craplog-javaGUI/craplog`<br><br>
 - Make sure you're inside the folder containing the "**pom.xml**" file
-  <br>`if [ -f "./pom.xml" ]; then echo "You're good to go\!"; else echo "Hmm... no, wrong location"; fi`
-  
+  <br>`if [ -f "./pom.xml" ]; then echo "You're good to go!"; else echo "Hmm... no, wrong location"; fi`<br><br>
 - Use **Maven** to compile the entire project:
   <br>`mvn clean install`
-  
-- At this point you should see a new folder named "**target**", which should contain two **jar** archive along with other folders.
-  <br>The file named "*CRAPLOG-version.jar*" will make use of dynamic libraries, it's slightly smaller but dependent from the system.
-  <br>The file named "*CRAPLOG-version-jar-with-dependencies.jar*" is a standalone: can be portable, it only needs *JRE* to run and is therefore the ***suggested*** one. You can rename it as you please, for example as "*CRAPLOG-version.jar*" using this command:
-  <br>`version=$(ls | grep jar-with-dependencies | cut -d \- -f2 | cut -d \. -f1,2) && rm CRAPLOG-$version.jar && mv CRAPLOG-$version-jar-with-dependencies.jar CRAPLOG-$version.jar`<br><br>
-- To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
-  <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`
-  
-- You can now move the jar file (just the archive! you'll not need the other folders created during compilation) wherever you want and execute it from there.<br>
+  <br>This command will download and build the necessary dependencies (if you don't have them already), so make sure you're connected to the internet during this step<br><br>
+- At this point you should see a new folder named "**target**", which contains two **jar** archives along with other folders:<br><br>
+  - The "*CRAPLOG-x.xx.jar*" file needs the *Apache Common Compress* library to be installed on the system and some [additional steps](#additional-steps) to be taken<br><br>
+  - The "*CRAPLOG-x.xx-jar-with-dependencies.jar*" file is a ready-to-use standalone (can be portable), the difference in dimensions is negligible and is therefore recommended to use this one.
+  <br>You can use the following commands (as they are) to remove the dependent archive and rename the standalone one:
+  <br>`cd target && version=$(ls | grep CRAPLOG-[0-9]\.[0-9][0-9]-jar-with-dependencies.jar | cut -d \- -f2)`
+  <br>If the previous command succeeded:
+  <br>`rm "CRAPLOG-$version.jar" && mv "CRAPLOG-$version-jar-with-dependencies.jar" "CRAPLOG-$version.jar"`<br><br>
+    - To run Craplog, just use this command (replace the */path/to/craplog* to fit yours, and use the *version* number you have!):
+      <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
+- You can now move the jar file (just the archive! Whatever archive you choose, you'll not need the other folders created during compilation) wherever you want and execute it from there.<br>
 A pre-made folder can be found at "*craplog-javaGUI/pre-made_folder*", which contains the configurations file (you'll need it, otherwise you'll have default settings at every run) and the crapstats directory (default to contain the statistics files created, can be modified in the configurations). This folder can be then renamed and/or moved anywhere (better before the first run)<br><br>
 
-**Tip**: you can make a *craplog* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog)) containing the command of the option you choose and move it inside */bin* or */usr/bin* to be able to run Craplog from terminal
+**Tip**: you can make a *craplog* script (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog)), containing the command of the option you choose and move it inside */bin* or */usr/bin* to be able to run Craplog from terminal
 
-**ProTip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)) containing the informations to the *craplog* script (it must be present inside your bins!) and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
+**ProTip**: you can then make a *craplog.desktop* file (![like this](https://github.com/elB4RTO/craplog-javaGUI/tree/main/installation_stuff/craplog.desktop)), containing the informations to the *craplog* script (it must be present inside your bins!) and then move the *craplog.desktop* file inside *~/.local/share/applications* to have a menu entry for Craplog
 
-<br><br>
+<br>
+
+### Additional steps
+
+Please follow these additional steps **if and only if** you've decided to use the *CRAPLOG-x.xx.jar* file while following the compilation guide<br>
+Also, make sure to replace the */path/to/craplog* to fit yours, and use the *version* number you have<br>
+
+There are two ways to use this file:<br>
+- By passing the Main class inline, using this command instead of the one provided for the standalone:
+  <br>`java -cp /path/to/craplog/CRAPLOG-version.jar Main`<br><br>
+- Or by manually adding the **Main Class** to the *MANIFEST*:
+  - Open the *jar* archive with your archive manager
+  - Step inside the "*META-INF*" folder
+  - Extract the "*MANIFEST.MF*" file
+  - Modify it by adding the following line (wherever you want, but make sure to have a new-line at the end of the file):
+    <br>`Main-Class: Main`
+  - Save the document
+  - Delete the old "*MANIFEST.MF*" entry from the archive and add the freshly modified one in the same position
+  - Save and update the archive if needed
+  - You can now run Craplog using the following command:
+    <br>`java -jar /path/to/craplog/CRAPLOG-version.jar`<br><br>
+
+<br>
 
 ## Log files
 
@@ -186,7 +202,7 @@ IP - - [DATE:TIME] "REQUEST URI" RESPONSE "FROM URI" "USER AGENT"<br>
 [DATE TIME] [LOG LEVEL] [PID] ERROR REPORT<br>
 *[Mon Jan 01 10:20:30.456789 2000] [headers:trace2] [pid 12345] mod_headers.c(874): AH01502: headers: ap_headers_output_filter()*
 
-<br><br>
+<br>
 
 ## Statistics
 
@@ -214,7 +230,7 @@ While parsing **error** logs, only two fields will be used:
 
 <br>
 
-### Session statistics
+### Sessions statistics
 
 Sessions are made by grouping statistics depending on the date of the single lines of every parsed log file and will be stored consequently: a new folder will be made if that date is not present yet, or the content will be merged if it already exists.<br><br>
 Olny '**\*.log.\***' files will be taken as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full logs stack of an entire (past) day.<br>
@@ -255,7 +271,7 @@ A note-block utility is available at `Utilities`→`Note` which can be used to t
 You can use `Utilities`→`Check updates` to query this repo and receive informations about version-updates.<br>
 No update will be done though, the utility just checks the version number: the *download* has to be done manually, but a *build_update.sh* script is provided
 
-<br><br>
+<br>
 
 ## Final considerations
 
@@ -277,7 +293,7 @@ Folder named '3' is always the oldest and '1' the newest.<br><br>
 Starting by this version, a new BACKUP is made every time you run Craplog *successfully* over GLOBALS.<br><br>
 Please notice that SESSION statistics will **not** be backed-up
 
-<br><br>
+<br>
 
 ## Contributions
 
