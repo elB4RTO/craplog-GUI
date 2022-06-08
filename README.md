@@ -34,28 +34,28 @@ A tool that scrapes Apache2 logs to create both Single-Session and Global statis
 
 ## Overview
 
-CRAPLOG is a tool that takes Apache2 logs in their default form, parses them and creates simple statistics.
+Craplog is a tool that takes Apache2 logs in their default form, parses them and creates simple statistics.
 
 <br>
 
-This fully Graphical version of CRAPLOG allows you to work on single-session log files (*\*.log.1*), or to select multiple files to use (eg. older logs/gzipped-logs files).
+Welcome to the fully graphical version
 
-![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1a.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/fullGUI/session.png)
 
-![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java1b.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/fullGUI/selection.png)
 
 <br>
 
-Differently from the other versions, this version of CRAPLOG will store statistics depending on the date of the single lines, to give more imporance to times and to analyze/backtrack statistics more easily.<br>
+Craplog will store statistics depending on the date of the single lines, to analyze/backtrack statistics more easily.<br>
 Be aware that log-files usage is not tracked, be careful of not parsing the same logs twice, which will lead to altered statistics.
 
-![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java2.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/fullGUI/view_stats.png)
 
 <br>
 
 It is also possible to display the log files contained in the logs folder, to directly view their content.
 
-![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java3.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/fullGUI/view_logs.png)
 
 <br><br>
 
@@ -232,8 +232,8 @@ While parsing **error** logs, only two fields will be used:
 
 ### Sessions statistics
 
-Sessions are made by grouping statistics depending on the date of the single lines of every parsed log file and will be stored consequently: a new folder will be made if that date is not present yet, or the content will be merged if it already exists.<br><br>
-Olny '**\*.log.\***' files will be taken as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full logs stack of an entire (past) day.<br>
+**Sessions** are made by grouping statistics depending on the **date** of the single lines and will be stored consequently: new content will be created if that date is not present yet, or it will be merged if the date already exists.<br><br>
+Olny '**\*.log.\***' files will be taken as input ('*.1*' in case of a single-session job, different numbers if working with a selection). This is because these files (usually) contain the full logs stack of an entire (*past*) day.<br>
 Running it against a *today*'s file (which is not complete yet) may lead to re-running it in the future on the same file, parsing the same lines twice.<br><br>
 Craplog is no more meant to be ran daily, since archived log files can be used as well as normal log files
 
@@ -241,7 +241,7 @@ Craplog is no more meant to be ran daily, since archived log files can be used a
 
 ### Global statistics
 
-Additionally, GLOBAL statistics may be created and/or updated *consequently* to SESSION statistics.<br>
+Additionally, **global statistics** may be created and/or updated *consequently*.<br>
 These statistics are identical to the session ones, in fact they're just merged sessions, for a larger view.
 
 <br>
@@ -254,7 +254,7 @@ As an example, if you insert "123", then only IP addresses starting with that se
 If you insert ".1", then nothing will be skipped, since no IP will ever start with a dot.<br>
 But the shortcut "::1" is used by Apache2 for internal connections and will therefore be valid to skip those lines.
 
-![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/java4.png)
+![screenshot](https://github.com/elB4RTO/CRAPLOG/blob/main/crapshots/fullGUI/whitelist.png)
 
 <br><br>
 
@@ -277,21 +277,22 @@ No update will be done though, the utility just checks the version number: the *
 
 ### Estimated working speed
 
-1~8 sec / 1 MB
+1~10 MB/s
 
-May be higher or lower depending on the complexity of the logs, the length of your GLOBALS (in case you're updating them), your hardware and the workload of your system during the execution.<br>
-If CRAPLOG takes more than 1 minute for a 10 MB file, you've probably been tested in some way (better to check).
+May be higher or lower depending on the complexity of the logs, the complexity of the stored statistics (in case of merge), your hardware and the workload of your system during the execution.<br>
+Usually, if Craplog is taking more than 10 seconds to parse 10 MB of data, it means you've probably been tested in some way (better to check).
 
 <br>
 
 ### Backups
 
-CRAPLOG will automatically make backups of GLOBAL statistic files (in case of fire).<br>
-If something goes wrong and you lose your actual GLOBAL files, you can recover them (at least the last backup).<br><br>
-Move inside the folder you choose to store statistics in (if you don't remember the path, you can open the `Preferences`→`Settings`>`Paths` menu, to view it. Beware that modifiyng a path which already contains statistics, will not move the files/folders in the new location), open the "**globals**" folder, show hidden files and open the folder named "**.backups**'. Here you will find the last 3 backups taken.<br>
-Folder named '3' is always the oldest and '1' the newest.<br><br>
-Starting by this version, a new BACKUP is made every time you run Craplog *successfully* over GLOBALS.<br><br>
-Please notice that SESSION statistics will **not** be backed-up
+Craplogwill automatically backup **global statistics** files (in case of fire).<br>
+If something goes wrong and you lose your actual globals, you can recover them (at least the last backup).<br><br>
+Move inside the folder you choose to store statistics in (if you don't remember the path, you can open the `Preferences`→`Settings`>`Paths` menu, to view it. Beware that modifiyng a path which already contains statistics, will not move the files/folders in the new location), open the "**globals**" folder, show hidden files and open the folder named "**.backups**'.<br>
+The complete path should look like **/<your_path>/craplog/crapstats/globals/.backups/**<br>
+Here you will find the last 3 backups taken. Folder named '3' is always the oldest and '1' the newest.<br><br>
+Starting by this version, a new ackupis made every time you run Craplog *successfully* over GLOBALS.<br><br>
+Please notice that session statistics will **not** be backed-up
 
 <br>
 
@@ -299,6 +300,6 @@ Please notice that SESSION statistics will **not** be backed-up
 
 CRAPLOG is under development
 
-If you have suggestions about how to improve it please open an ![issue](https://github.com/elB4RTO/craplog-javaGUI/issues) or make a ![pull request](https://github.com/elB4RTO/craplog-javaGUI/pulls)
+If you have suggestions about how to improve it please open an ![issue](https://github.com/elB4RTO/craplog-fullGUI/issues) or make a ![pull request](https://github.com/elB4RTO/craplog-fullGUI/pulls)
 
 If you're not running Apache, but you like this tool: same as the above (bring a sample of a log file)
