@@ -40,22 +40,22 @@ Craplog is a tool that takes Apache2 logs in their default form, parses them and
 
 Welcome to the fully **graphical** version
 
-![screenshot](https://github.com/elB4RTO/screenshots/blob/main/Craplog/GUI/session.png)
+![screenshot](https://raw.githubusercontent.com/elB4RTO/screenshots/main/Craplog/GUI/session.png)
 
-![screenshot](https://github.com/elB4RTO/screenshots/blob/main/Craplog/GUI/selection.png)
+![screenshot](https://raw.githubusercontent.com/elB4RTO/screenshots/main/Craplog/GUI/selection.png)
 
 <br/>
 
 Craplog will store statistics depending on the date of the single lines, to analyze/backtrack statistics more easily.<br/>
 Be aware that log-files usage is not tracked, be careful of not parsing the same logs twice, which will lead to altered statistics.
 
-![screenshot](https://github.com/elB4RTO/screenshots/blob/main/Craplog/GUI/view_stats.png)
+![screenshot](https://raw.githubusercontent.com/elB4RTO/screenshots/main/Craplog/GUI/view_stats.png)
 
 <br/>
 
 It is also possible to display the log files contained in the logs folder, to directly view their content.
 
-![screenshot](https://github.com/elB4RTO/screenshots/blob/main/Craplog/GUI/view_logs.png)
+![screenshot](https://raw.githubusercontent.com/elB4RTO/screenshots/main/Craplog/GUI/view_logs.png)
 
 <br/><br/>
 
@@ -270,7 +270,7 @@ As an example, if you insert "123", then only IP addresses starting with that se
 If you insert ".1", then nothing will be skipped, since no IP will ever start with a dot.<br/>
 But the shortcut "::1" is used by Apache2 for internal connections and will therefore be valid to skip those lines.
 
-![screenshot](https://github.com/elB4RTO/screenshots/blob/main/Craplog/GUI/whitelist.png)
+![screenshot](https://raw.githubusercontent.com/elB4RTO/screenshots/main/Craplog/GUI/whitelist.png)
 
 <br/><br/>
 
